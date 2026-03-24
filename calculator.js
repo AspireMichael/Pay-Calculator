@@ -744,8 +744,10 @@ function calculatePayrollSummary() {
     }
 
     // Apply Employment Allowance against total Employer NI
+    // EA only available with 2+ people on payroll (sole director can't claim)
+    const headcount = currentEmployees.length > 0 ? currentEmployees.length : (currentPayroll > 0 ? 1 : 0);
     let eaSaving = 0;
-    if (useEA) {
+    if (useEA && headcount >= 2) {
         eaSaving = Math.min(totalErNI, EMPLOYER_NI.employmentAllowance);
         totalErNI = Math.max(0, totalErNI - EMPLOYER_NI.employmentAllowance);
     }
@@ -848,6 +850,7 @@ function calculateHiring() {
 
     // Calculate existing workforce Employer NI (before new hire)
     let existingErNI = 0;
+    const existingHeadcount = currentEmployees.length > 0 ? currentEmployees.length : (currentPayroll > 0 ? 1 : 0);
     if (currentEmployees.length > 0) {
         for (const emp of currentEmployees) {
             existingErNI += calculateEmployerNI(emp.salary || 0, false);
@@ -860,20 +863,31 @@ function calculateHiring() {
     const newHireErNI = calculateEmployerNI(newSalary, false);
     const totalErNI_before = existingErNI;
     const totalErNI_after = existingErNI + newHireErNI;
+    const afterHeadcount = existingHeadcount + 1;
 
-    // Apply Employment Allowance to the total workforce NI (before and after)
+    // Apply Employment Allowance:
+    // EA only available with 2+ people on payroll (sole director can't claim)
+    // BEFORE: only apply EA if existing headcount >= 2
+    // AFTER:  apply EA if total headcount >= 2 (hiring makes you eligible)
     let effectiveErNI_before = totalErNI_before;
     let effectiveErNI_after = totalErNI_after;
     let eaSavingBefore = 0;
     let eaSavingAfter = 0;
     if (useEA) {
-        eaSavingBefore = Math.min(totalErNI_before, EMPLOYER_NI.employmentAllowance);
-        effectiveErNI_before = Math.max(0, totalErNI_before - EMPLOYER_NI.employmentAllowance);
-        eaSavingAfter = Math.min(totalErNI_after, EMPLOYER_NI.employmentAllowance);
-        effectiveErNI_after = Math.max(0, totalErNI_after - EMPLOYER_NI.employmentAllowance);
+        // Before hire: only eligible if already have 2+ people
+        if (existingHeadcount >= 2) {
+            eaSavingBefore = Math.min(totalErNI_before, EMPLOYER_NI.employmentAllowance);
+            effectiveErNI_before = Math.max(0, totalErNI_before - EMPLOYER_NI.employmentAllowance);
+        }
+        // After hire: eligible if 2+ people total
+        if (afterHeadcount >= 2) {
+            eaSavingAfter = Math.min(totalErNI_after, EMPLOYER_NI.employmentAllowance);
+            effectiveErNI_after = Math.max(0, totalErNI_after - EMPLOYER_NI.employmentAllowance);
+        }
     }
 
     // The actual extra NI cost = difference in effective NI bills
+    // Can be NEGATIVE when hiring triggers EA eligibility
     const effectiveNewErNI = effectiveErNI_after - effectiveErNI_before;
 
     const newPension = newSalary * (newPensionPct / 100);
@@ -915,12 +929,21 @@ function calculateHiring() {
     setText('hire-cmp-payroll-after', formatCurrency(currentPayroll + newSalary));
     setText('hire-cmp-payroll-change', `+${formatCurrency(newSalary)}`);
 
-    let erniLabel = formatCurrency(effectiveNewErNI);
-    if (useEA && effectiveNewErNI < newHireErNI) {
-        erniLabel += ` (EA saves ${formatCurrency(newHireErNI - effectiveNewErNI)})`;
+    let erniLabel = formatCurrency(Math.abs(effectiveNewErNI));
+    let erniChangeLabel = '';
+    if (effectiveNewErNI < 0) {
+        // Hiring triggers EA — actually saves NI overall
+        erniLabel = `-${formatCurrency(Math.abs(effectiveNewErNI))}`;
+        erniChangeLabel = `${erniLabel} (EA now eligible — saves ${formatCurrency(eaSavingAfter)} on total NI)`;
+        erniLabel = erniChangeLabel;
+    } else if (useEA && effectiveNewErNI < newHireErNI) {
+        erniLabel = `${formatCurrency(effectiveNewErNI)} (EA saves ${formatCurrency(newHireErNI - effectiveNewErNI)})`;
+        erniChangeLabel = `+${erniLabel}`;
+    } else {
+        erniChangeLabel = `+${erniLabel}`;
     }
     setText('hire-cmp-erni', erniLabel);
-    setText('hire-cmp-erni-change', `+${erniLabel}`);
+    setText('hire-cmp-erni-change', erniChangeLabel);
 
     setText('hire-cmp-pension', formatCurrency(newPension));
     setText('hire-cmp-pension-change', `+${formatCurrency(newPension)}`);
