@@ -698,6 +698,7 @@ function calculatePayrollSummary() {
     const revenue = parseFloat($('#hire-revenue').value) || 0;
     const profit = parseFloat($('#hire-profit').value) || 0;
     let currentPayroll = parseFloat($('#hire-current-payroll').value) || 0;
+    const useEA = $('#hire-employment-allowance').checked;
 
     // Sum employee salaries if provided
     const employeeSalaryTotal = currentEmployees.reduce((sum, e) => sum + (e.salary || 0), 0);
@@ -742,6 +743,13 @@ function calculatePayrollSummary() {
         totalErPension = qe * PENSION.standardEmployerRate;
     }
 
+    // Apply Employment Allowance against total Employer NI
+    let eaSaving = 0;
+    if (useEA) {
+        eaSaving = Math.min(totalErNI, EMPLOYER_NI.employmentAllowance);
+        totalErNI = Math.max(0, totalErNI - EMPLOYER_NI.employmentAllowance);
+    }
+
     const totalCost = totalSalaries + totalErNI + totalErPension;
 
     // Corporation tax
@@ -754,7 +762,7 @@ function calculatePayrollSummary() {
     $('#payroll-summary-results').style.display = 'block';
 
     setText('ps-total-salaries', formatCurrency(totalSalaries));
-    setText('ps-total-erni', formatCurrency(totalErNI));
+    setText('ps-total-erni', formatCurrency(totalErNI) + (eaSaving > 0 ? ` (saved ${formatCurrency(eaSaving)} via EA)` : ''));
     setText('ps-total-pension', formatCurrency(totalErPension));
     setText('ps-total-cost', formatCurrency(totalCost));
 
@@ -787,14 +795,26 @@ function calculatePayrollSummary() {
         // Totals row
         const totalsRow = document.createElement('tr');
         totalsRow.className = 'total-row';
+        let erNITotalLabel = formatCurrency(totalErNI);
+        if (eaSaving > 0) erNITotalLabel += ` *`;
         totalsRow.innerHTML = `
             <td><strong>Total</strong></td>
             <td><strong>${formatCurrency(totalSalaries)}</strong></td>
-            <td><strong>${formatCurrency(totalErNI)}</strong></td>
+            <td><strong>${erNITotalLabel}</strong></td>
             <td><strong>${formatCurrency(totalErPension)}</strong></td>
             <td><strong>${formatCurrency(totalCost)}</strong></td>
         `;
         tbody.appendChild(totalsRow);
+
+        if (eaSaving > 0) {
+            const eaRow = document.createElement('tr');
+            eaRow.innerHTML = `
+                <td colspan="5" style="font-size:0.82rem;color:var(--accent-green);padding-top:0.25rem;">
+                    * Employment Allowance saves ${formatCurrency(eaSaving)} off Employer NI (${formatCurrency(EMPLOYER_NI.employmentAllowance)} allowance)
+                </td>
+            `;
+            tbody.appendChild(eaRow);
+        }
     } else {
         $('#ps-employee-breakdown').style.display = 'none';
     }
@@ -807,7 +827,7 @@ function calculateHiring() {
     const revenue = parseFloat($('#hire-revenue').value) || 0;
     const profit = parseFloat($('#hire-profit').value) || 0;
     let currentPayroll = parseFloat($('#hire-current-payroll').value) || 0;
-    const alreadyClaimingAllowance = $('#hire-employment-allowance').checked;
+    const useEA = $('#hire-employment-allowance').checked;
 
     // Sum employee salaries if provided
     const employeeSalaryTotal = currentEmployees.reduce((sum, e) => sum + (e.salary || 0), 0);
@@ -826,11 +846,39 @@ function calculateHiring() {
         return;
     }
 
-    // New hire costs
-    const newErNI = calculateEmployerNI(newSalary, false);
+    // Calculate existing workforce Employer NI (before new hire)
+    let existingErNI = 0;
+    if (currentEmployees.length > 0) {
+        for (const emp of currentEmployees) {
+            existingErNI += calculateEmployerNI(emp.salary || 0, false);
+        }
+    } else if (currentPayroll > 0) {
+        existingErNI = calculateEmployerNI(currentPayroll, false);
+    }
+
+    // New hire raw Employer NI
+    const newHireErNI = calculateEmployerNI(newSalary, false);
+    const totalErNI_before = existingErNI;
+    const totalErNI_after = existingErNI + newHireErNI;
+
+    // Apply Employment Allowance to the total workforce NI (before and after)
+    let effectiveErNI_before = totalErNI_before;
+    let effectiveErNI_after = totalErNI_after;
+    let eaSavingBefore = 0;
+    let eaSavingAfter = 0;
+    if (useEA) {
+        eaSavingBefore = Math.min(totalErNI_before, EMPLOYER_NI.employmentAllowance);
+        effectiveErNI_before = Math.max(0, totalErNI_before - EMPLOYER_NI.employmentAllowance);
+        eaSavingAfter = Math.min(totalErNI_after, EMPLOYER_NI.employmentAllowance);
+        effectiveErNI_after = Math.max(0, totalErNI_after - EMPLOYER_NI.employmentAllowance);
+    }
+
+    // The actual extra NI cost = difference in effective NI bills
+    const effectiveNewErNI = effectiveErNI_after - effectiveErNI_before;
+
     const newPension = newSalary * (newPensionPct / 100);
     const newExtrasAnnual = newExtrasMonthly * 12;
-    const trueCostOfHire = newSalary + newErNI + newPension + newExtrasAnnual;
+    const trueCostOfHire = newSalary + effectiveNewErNI + newPension + newExtrasAnnual;
 
     // Corporation tax: before
     const ctBefore = calculateCorporationTax(profit);
@@ -867,8 +915,12 @@ function calculateHiring() {
     setText('hire-cmp-payroll-after', formatCurrency(currentPayroll + newSalary));
     setText('hire-cmp-payroll-change', `+${formatCurrency(newSalary)}`);
 
-    setText('hire-cmp-erni', formatCurrency(newErNI));
-    setText('hire-cmp-erni-change', `+${formatCurrency(newErNI)}`);
+    let erniLabel = formatCurrency(effectiveNewErNI);
+    if (useEA && effectiveNewErNI < newHireErNI) {
+        erniLabel += ` (EA saves ${formatCurrency(newHireErNI - effectiveNewErNI)})`;
+    }
+    setText('hire-cmp-erni', erniLabel);
+    setText('hire-cmp-erni-change', `+${erniLabel}`);
 
     setText('hire-cmp-pension', formatCurrency(newPension));
     setText('hire-cmp-pension-change', `+${formatCurrency(newPension)}`);
