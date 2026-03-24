@@ -87,19 +87,20 @@
                         <h2>Your Teaching Role</h2>
                     </div>
                     <div class="card-body">
-                        <div class="form-group">
-                            <label>Region</label>
-                            <div class="checkbox-group" style="display:flex;gap:1rem;flex-wrap:wrap;">
-                                <label class="checkbox-label"><input type="radio" name="region" value="england" checked><span class="checkmark"></span>Rest of England</label>
-                                <label class="checkbox-label"><input type="radio" name="region" value="fringe"><span class="checkmark"></span>London Fringe</label>
-                                <label class="checkbox-label"><input type="radio" name="region" value="outer"><span class="checkmark"></span>Outer London</label>
-                                <label class="checkbox-label"><input type="radio" name="region" value="inner"><span class="checkmark"></span>Inner London</label>
+                        <fieldset class="form-group" style="border:none;padding:0;margin:0;">
+                            <legend style="font-weight:600;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-secondary);margin-bottom:0.5rem;">Region</legend>
+                            <div class="checkbox-group" role="radiogroup" aria-label="Pay scale region" style="display:flex;gap:1rem;flex-wrap:wrap;">
+                                <label class="checkbox-label"><input type="radio" name="region" value="england" aria-label="Rest of England pay scale" checked><span class="checkmark"></span>Rest of England</label>
+                                <label class="checkbox-label"><input type="radio" name="region" value="fringe" aria-label="London Fringe pay scale"><span class="checkmark"></span>London Fringe</label>
+                                <label class="checkbox-label"><input type="radio" name="region" value="outer" aria-label="Outer London pay scale"><span class="checkmark"></span>Outer London</label>
+                                <label class="checkbox-label"><input type="radio" name="region" value="inner" aria-label="Inner London pay scale"><span class="checkmark"></span>Inner London</label>
                             </div>
+                        </fieldset>
                         </div>
 
                         <div class="form-group">
                             <label for="pay-scale">Pay Scale Point</label>
-                            <select id="pay-scale" class="input-standard">
+                            <select id="pay-scale" class="input-standard" aria-label="Select your pay scale point">
                                 <!-- Populated dynamically from JS -->
                             </select>
                         </div>
@@ -108,13 +109,13 @@
                             <label for="custom-salary">Custom Annual Salary</label>
                             <div class="input-wrapper currency">
                                 <span class="input-prefix">£</span>
-                                <input type="number" id="custom-salary" placeholder="e.g. 42000" min="0" step="100">
+                                <input type="number" id="custom-salary" placeholder="e.g. 42000" min="0" step="100" aria-label="Custom annual salary amount">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="tlr-payment">TLR Payment</label>
-                            <select id="tlr-payment" class="input-standard">
+                            <select id="tlr-payment" class="input-standard" aria-label="Select TLR payment level">
                                 <option value="none">None</option>
                                 <optgroup label="TLR 2">
                                     <option value="tlr2_min">TLR 2 (Min) – £3,527</option>
@@ -131,7 +132,7 @@
 
                         <div class="form-group">
                             <label for="sen-allowance">SEN Allowance</label>
-                            <select id="sen-allowance" class="input-standard">
+                            <select id="sen-allowance" class="input-standard" aria-label="Select SEN allowance level">
                                 <option value="none">None</option>
                                 <option value="min">SEN (Min) – £2,787</option>
                                 <option value="max">SEN (Max) – £5,497</option>
@@ -164,10 +165,10 @@
 
                         <!-- Pension Toggle -->
                         <div class="form-group">
-                            <label>Pension</label>
-                            <div class="toggle-switch-group">
-                                <button class="toggle-btn active" id="pension-tps" type="button">Teachers' Pension (TPS)</button>
-                                <button class="toggle-btn" id="pension-custom" type="button">Custom</button>
+                            <label id="pension-label">Pension</label>
+                            <div class="toggle-switch-group" role="group" aria-labelledby="pension-label">
+                                <button class="toggle-btn active" id="pension-tps" type="button" aria-pressed="true" aria-label="Use Teachers' Pension Scheme">Teachers' Pension (TPS)</button>
+                                <button class="toggle-btn" id="pension-custom" type="button" aria-pressed="false" aria-label="Use custom pension rates">Custom</button>
                             </div>
                             <div id="custom-pension-inputs" style="display:none;margin-top:0.75rem;">
                                 <div class="form-row" style="display:flex;gap:0.75rem;">
@@ -183,31 +184,31 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label>Student Loan</label>
-                            <div class="checkbox-group">
-                                <label class="checkbox-label"><input type="checkbox" id="sl-plan1"> Plan 1</label>
-                                <label class="checkbox-label"><input type="checkbox" id="sl-plan2"> Plan 2</label>
-                                <label class="checkbox-label"><input type="checkbox" id="sl-plan4"> Plan 4</label>
-                                <label class="checkbox-label"><input type="checkbox" id="sl-plan5"> Plan 5</label>
-                                <label class="checkbox-label"><input type="checkbox" id="sl-postgrad"> Postgraduate</label>
+                        <fieldset class="form-group" style="border:none;padding:0;margin:0;">
+                            <legend style="font-weight:600;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-secondary);margin-bottom:0.5rem;">Student Loan</legend>
+                            <div class="checkbox-group" role="group" aria-label="Student loan repayment plans">
+                                <label class="checkbox-label"><input type="checkbox" id="sl-plan1" aria-label="Student Loan Plan 1"> Plan 1</label>
+                                <label class="checkbox-label"><input type="checkbox" id="sl-plan2" aria-label="Student Loan Plan 2"> Plan 2</label>
+                                <label class="checkbox-label"><input type="checkbox" id="sl-plan4" aria-label="Student Loan Plan 4"> Plan 4</label>
+                                <label class="checkbox-label"><input type="checkbox" id="sl-plan5" aria-label="Student Loan Plan 5"> Plan 5</label>
+                                <label class="checkbox-label"><input type="checkbox" id="sl-postgrad" aria-label="Postgraduate Loan"> Postgraduate</label>
                             </div>
-                        </div>
+                        </fieldset>
 
                         <div class="form-group">
                             <label for="children">Number of Children (for Child Benefit)</label>
-                            <input type="number" id="children" value="0" min="0" max="10" class="input-standard">
+                            <input type="number" id="children" value="0" min="0" max="10" class="input-standard" aria-label="Number of children in full-time education">
                         </div>
 
-                        <button class="btn-calculate" id="btn-calculate" type="button">
+                        <button class="btn-calculate" id="btn-calculate" type="button" aria-label="Calculate your take-home pay">
                             <span>Calculate Take-Home Pay</span>
-                            <span class="btn-icon">→</span>
+                            <span class="btn-icon" aria-hidden="true">→</span>
                         </button>
                     </div>
                 </div>
 
                 <!-- Results Card -->
-                <div class="card results-card" id="results-section" style="display:none;">
+                <div class="card results-card" id="results-section" style="display:none;" aria-live="polite" aria-atomic="true" role="region" aria-label="Calculation results">
                     <div class="card-header">
                         <h2>Your Take-Home Pay</h2>
                     </div>
@@ -411,20 +412,45 @@
         </aside>
         </div>
 
-    <!-- Ad Space -->
-    <div style="max-width:1200px;margin:1.5rem auto;display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;">
-        <a href="https://aspireinclusion.app/" target="_blank" rel="noopener" style="flex:1;min-width:280px;max-width:550px;background:var(--bg-card);border:2px solid var(--border-color);border-radius:16px;padding:1.5rem;text-align:center;text-decoration:none;transition:border-color 0.3s,transform 0.2s,box-shadow 0.3s;display:block;" onmouseover="this.style.borderColor='#1a5276';this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.15)'" onmouseout="this.style.borderColor='var(--border-color)';this.style.transform='';this.style.boxShadow=''">
-            <img src="aspire-inclusion-logo.png" alt="Aspire Inclusion Technologies" style="max-width:240px;height:auto;margin:0 auto 0.75rem;display:block;">
-            <p style="color:var(--text-secondary);font-size:0.9rem;">SEND Support Apps including Sensory Circuit Builder →</p>
-        </a>
-        <a href="https://aspirebm.thinkific.com/" target="_blank" rel="noopener" style="flex:1;min-width:280px;max-width:550px;background:var(--bg-card);border:2px solid var(--border-color);border-radius:16px;padding:1.5rem;text-align:center;text-decoration:none;transition:border-color 0.3s,transform 0.2s,box-shadow 0.3s;display:block;" onmouseover="this.style.borderColor='#e91e96';this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.15)'" onmouseout="this.style.borderColor='var(--border-color)';this.style.transform='';this.style.boxShadow=''">
-            <img src="aspire-bm-logo.png" alt="Aspire Behaviour Management - Creating Inclusive Education" style="max-width:240px;height:auto;margin:0 auto 0.75rem;display:block;">
-            <p style="color:var(--text-secondary);font-size:0.9rem;">Training to Support SEMH &amp; SEND Children →</p>
-        </a>
+    <!-- About This Tool -->
+    <div style="max-width:1200px;margin:1.5rem auto 0.75rem;padding:0 1rem;">
+        <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:1rem 1.25rem;">
+            <h3 style="font-size:0.85rem;font-weight:700;color:var(--text-primary);margin-bottom:0.4rem;">About this tool</h3>
+            <p style="font-size:0.82rem;color:var(--text-secondary);line-height:1.6;margin:0;">This free calculator is provided by <strong>Aspire Inclusion Technologies</strong>. We also offer inclusion apps and behaviour training services for schools. Links below are promotional.</p>
+        </div>
     </div>
 
-    <footer class="app-footer" style="max-width:1200px;margin:1rem auto;">
-        <p>Calculations are estimates based on 2026/27 pay scales and 2026/27 UK tax year rates. Always consult a qualified accountant for financial decisions.</p>
+    <!-- Sponsored Resources -->
+    <div style="max-width:1200px;margin:0 auto 1.5rem;padding:0 1rem;">
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;">
+            <div style="flex:1;min-width:280px;max-width:550px;">
+                <p style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:0.4rem;text-align:center;">Sponsored Resource</p>
+                <a href="https://aspireinclusion.app/" target="_blank" rel="noopener sponsored" style="background:var(--bg-card);border:2px solid var(--border-color);border-radius:16px;padding:1.5rem;text-align:center;text-decoration:none;transition:border-color 0.3s,transform 0.2s,box-shadow 0.3s;display:block;" onmouseover="this.style.borderColor='#1a5276';this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.15)'" onmouseout="this.style.borderColor='var(--border-color)';this.style.transform='';this.style.boxShadow=''">
+                    <img src="aspire-inclusion-logo.png" alt="Aspire Inclusion Technologies" style="max-width:240px;height:auto;margin:0 auto 0.75rem;display:block;">
+                    <p style="color:var(--text-secondary);font-size:0.9rem;">SEND Support Apps including Sensory Circuit Builder →</p>
+                </a>
+            </div>
+            <div style="flex:1;min-width:280px;max-width:550px;">
+                <p style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:0.4rem;text-align:center;">Sponsored Resource</p>
+                <a href="https://aspirebm.thinkific.com/" target="_blank" rel="noopener sponsored" style="background:var(--bg-card);border:2px solid var(--border-color);border-radius:16px;padding:1.5rem;text-align:center;text-decoration:none;transition:border-color 0.3s,transform 0.2s,box-shadow 0.3s;display:block;" onmouseover="this.style.borderColor='#e91e96';this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.15)'" onmouseout="this.style.borderColor='var(--border-color)';this.style.transform='';this.style.boxShadow=''">
+                    <img src="aspire-bm-logo.png" alt="Aspire Behaviour Management - Creating Inclusive Education" style="max-width:240px;height:auto;margin:0 auto 0.75rem;display:block;">
+                    <p style="color:var(--text-secondary);font-size:0.9rem;">Training to Support SEMH &amp; SEND Children →</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer style="max-width:1200px;margin:0 auto;padding:1.5rem 1rem;border-top:1px solid var(--border-color);">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1rem;">
+            <div>
+                <p style="font-size:0.85rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">© 2026 Aspire Inclusion Technologies</p>
+                <p style="font-size:0.78rem;color:var(--text-muted);margin:0;">Educational financial estimate tool – not financial advice</p>
+            </div>
+            <div style="display:flex;gap:1.5rem;">
+                <a href="#" style="font-size:0.8rem;color:var(--text-secondary);text-decoration:none;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">Privacy Policy</a>
+                <a href="#" style="font-size:0.8rem;color:var(--text-secondary);text-decoration:none;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">Contact</a>
+            </div>
+        </div>
     </footer>
 
     <script src="teacher.js"></script>

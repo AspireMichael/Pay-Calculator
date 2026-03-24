@@ -46,58 +46,58 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="emp-salary">Gross Salary</label>
-                                    <div class="toggle-switch-group" style="margin-bottom:0.5rem;">
-                                        <button class="toggle-btn active" id="salary-annual" type="button">Annual</button>
-                                        <button class="toggle-btn" id="salary-monthly" type="button">Monthly</button>
+                                    <div class="toggle-switch-group" role="group" aria-label="Salary input period" style="margin-bottom:0.5rem;">
+                                        <button class="toggle-btn active" id="salary-annual" type="button" aria-pressed="true" aria-label="Enter annual salary">Annual</button>
+                                        <button class="toggle-btn" id="salary-monthly" type="button" aria-pressed="false" aria-label="Enter monthly salary">Monthly</button>
                                     </div>
                                     <div class="input-wrapper currency">
                                         <span class="input-prefix">£</span>
-                                        <input type="number" id="emp-salary" placeholder="e.g. 35000" min="0" step="100">
+                                        <input type="number" id="emp-salary" placeholder="e.g. 35000" min="0" step="100" aria-label="Gross salary amount">
                                     </div>
                                     <div class="info-badge" id="salary-conversion" style="margin-top:0.4rem;display:none;"></div>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="emp-tax-code">Tax Code</label>
-                                    <input type="text" id="emp-tax-code" value="1257L" placeholder="1257L" class="input-standard">
+                                    <input type="text" id="emp-tax-code" value="1257L" placeholder="1257L" class="input-standard" aria-label="Your HMRC tax code">
                                 </div>
 
-                                <div class="form-group">
-                                    <label>Student Loan</label>
-                                    <div class="checkbox-group">
+                                <fieldset class="form-group" style="border:none;padding:0;margin:0;">
+                                    <legend style="font-weight:600;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-secondary);margin-bottom:0.5rem;">Student Loan</legend>
+                                    <div class="checkbox-group" role="group" aria-label="Student loan repayment plans">
                                         <label class="checkbox-label">
-                                            <input type="checkbox" id="emp-sl-plan1" value="plan1">
+                                            <input type="checkbox" id="emp-sl-plan1" value="plan1" aria-label="Student Loan Plan 1">
                                             <span class="checkmark"></span>
                                             Plan 1
                                         </label>
                                         <label class="checkbox-label">
-                                            <input type="checkbox" id="emp-sl-plan2" value="plan2">
+                                            <input type="checkbox" id="emp-sl-plan2" value="plan2" aria-label="Student Loan Plan 2">
                                             <span class="checkmark"></span>
                                             Plan 2
                                         </label>
                                         <label class="checkbox-label">
-                                            <input type="checkbox" id="emp-sl-plan4" value="plan4">
+                                            <input type="checkbox" id="emp-sl-plan4" value="plan4" aria-label="Student Loan Plan 4">
                                             <span class="checkmark"></span>
                                             Plan 4
                                         </label>
                                         <label class="checkbox-label">
-                                            <input type="checkbox" id="emp-sl-plan5" value="plan5">
+                                            <input type="checkbox" id="emp-sl-plan5" value="plan5" aria-label="Student Loan Plan 5">
                                             <span class="checkmark"></span>
                                             Plan 5
                                         </label>
                                         <label class="checkbox-label">
-                                            <input type="checkbox" id="emp-sl-postgrad" value="postgrad">
+                                            <input type="checkbox" id="emp-sl-postgrad" value="postgrad" aria-label="Postgraduate Loan">
                                             <span class="checkmark"></span>
                                             Postgraduate
                                         </label>
                                     </div>
-                                </div>
+                                </fieldset>
 
                                 <div class="form-group">
-                                    <label>Pension</label>
-                                    <div class="toggle-switch-group">
-                                        <button class="toggle-btn active" id="pension-standard" data-pension="standard">Standard Workplace</button>
-                                        <button class="toggle-btn" id="pension-custom" data-pension="custom">Custom</button>
+                                    <label id="pension-label-personal">Pension</label>
+                                    <div class="toggle-switch-group" role="group" aria-labelledby="pension-label-personal">
+                                        <button class="toggle-btn active" id="pension-standard" data-pension="standard" aria-pressed="true" aria-label="Standard workplace pension">Standard Workplace</button>
+                                        <button class="toggle-btn" id="pension-custom" data-pension="custom" aria-pressed="false" aria-label="Custom pension rates">Custom</button>
                                     </div>
                                     <div class="pension-details" id="pension-standard-info">
                                         <div class="info-badge">Employee: 5% · Employer: 3% (on qualifying earnings £6,240–£50,270)</div>
@@ -127,20 +127,20 @@
                                     <div class="form-row">
                                         <div class="form-group-sm">
                                             <label for="emp-children">Number of Children</label>
-                                            <input type="number" id="emp-children" value="0" min="0" max="20" class="input-standard">
+                                            <input type="number" id="emp-children" value="0" min="0" max="20" class="input-standard" aria-label="Number of children in full-time education">
                                         </div>
                                     </div>
                                 </div>
 
-                                <button class="btn-calculate" id="btn-calc-employee" type="button">
+                                <button class="btn-calculate" id="btn-calc-employee" type="button" aria-label="Calculate your take-home pay">
                                     <span>Calculate Take-Home Pay</span>
-                                    <span class="btn-icon">→</span>
+                                    <span class="btn-icon" aria-hidden="true">→</span>
                                 </button>
                             </div>
                         </div>
 
                         <!-- Results Card -->
-                        <div class="card results-card" id="employee-results" style="display:none;">
+                        <div class="card results-card" id="employee-results" style="display:none;" aria-live="polite" aria-atomic="true" role="region" aria-label="Calculation results">
                             <div class="card-header">
                                 <h2>Your Take-Home Pay</h2>
                             </div>
@@ -489,20 +489,45 @@
             </aside>
         </div>
 
-        <!-- Ad Space -->
-        <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-top:1.5rem;">
-            <a href="https://aspireinclusion.app/" target="_blank" rel="noopener" style="flex:1;min-width:280px;max-width:550px;background:var(--bg-card);border:2px solid var(--border-color);border-radius:16px;padding:1.5rem;text-align:center;text-decoration:none;transition:border-color 0.3s,transform 0.2s,box-shadow 0.3s;display:block;" onmouseover="this.style.borderColor='#1a5276';this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.15)'" onmouseout="this.style.borderColor='var(--border-color)';this.style.transform='';this.style.boxShadow=''">
-                <img src="aspire-inclusion-logo.png" alt="Aspire Inclusion Technologies" style="max-width:240px;height:auto;margin:0 auto 0.75rem;display:block;">
-                <p style="color:var(--text-secondary);font-size:0.9rem;">SEND Support Apps including Sensory Circuit Builder &rarr;</p>
-            </a>
-            <a href="https://aspirebm.thinkific.com/" target="_blank" rel="noopener" style="flex:1;min-width:280px;max-width:550px;background:var(--bg-card);border:2px solid var(--border-color);border-radius:16px;padding:1.5rem;text-align:center;text-decoration:none;transition:border-color 0.3s,transform 0.2s,box-shadow 0.3s;display:block;" onmouseover="this.style.borderColor='#e91e96';this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.15)'" onmouseout="this.style.borderColor='var(--border-color)';this.style.transform='';this.style.boxShadow=''">
-                <img src="aspire-bm-logo.png" alt="Aspire Behaviour Management - Creating Inclusive Education" style="max-width:240px;height:auto;margin:0 auto 0.75rem;display:block;">
-                <p style="color:var(--text-secondary);font-size:0.9rem;">Training to Support SEMH &amp; SEND Children &rarr;</p>
-            </a>
+        <!-- About This Tool -->
+        <div style="margin-top:1.5rem;">
+            <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:1rem 1.25rem;">
+                <h3 style="font-size:0.85rem;font-weight:700;color:var(--text-primary);margin-bottom:0.4rem;">About this tool</h3>
+                <p style="font-size:0.82rem;color:var(--text-secondary);line-height:1.6;margin:0;">This free calculator is provided by <strong>Aspire Inclusion Technologies</strong>. We also offer inclusion apps and behaviour training services for schools. Links below are promotional.</p>
+            </div>
         </div>
 
-        <footer class="app-footer">
-            <p>Calculations are estimates based on 2026/27 UK tax year rates. Always consult a qualified accountant for financial decisions.</p>
+        <!-- Sponsored Resources -->
+        <div style="margin-top:0.75rem;">
+            <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;">
+                <div style="flex:1;min-width:280px;max-width:550px;">
+                    <p style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:0.4rem;text-align:center;">Sponsored Resource</p>
+                    <a href="https://aspireinclusion.app/" target="_blank" rel="noopener sponsored" style="background:var(--bg-card);border:2px solid var(--border-color);border-radius:16px;padding:1.5rem;text-align:center;text-decoration:none;transition:border-color 0.3s,transform 0.2s,box-shadow 0.3s;display:block;" onmouseover="this.style.borderColor='#1a5276';this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.15)'" onmouseout="this.style.borderColor='var(--border-color)';this.style.transform='';this.style.boxShadow=''">
+                        <img src="aspire-inclusion-logo.png" alt="Aspire Inclusion Technologies" style="max-width:240px;height:auto;margin:0 auto 0.75rem;display:block;">
+                        <p style="color:var(--text-secondary);font-size:0.9rem;">SEND Support Apps including Sensory Circuit Builder &rarr;</p>
+                    </a>
+                </div>
+                <div style="flex:1;min-width:280px;max-width:550px;">
+                    <p style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:0.4rem;text-align:center;">Sponsored Resource</p>
+                    <a href="https://aspirebm.thinkific.com/" target="_blank" rel="noopener sponsored" style="background:var(--bg-card);border:2px solid var(--border-color);border-radius:16px;padding:1.5rem;text-align:center;text-decoration:none;transition:border-color 0.3s,transform 0.2s,box-shadow 0.3s;display:block;" onmouseover="this.style.borderColor='#e91e96';this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.15)'" onmouseout="this.style.borderColor='var(--border-color)';this.style.transform='';this.style.boxShadow=''">
+                        <img src="aspire-bm-logo.png" alt="Aspire Behaviour Management - Creating Inclusive Education" style="max-width:240px;height:auto;margin:0 auto 0.75rem;display:block;">
+                        <p style="color:var(--text-secondary);font-size:0.9rem;">Training to Support SEMH &amp; SEND Children &rarr;</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <footer style="margin-top:1.5rem;padding:1.5rem 0;border-top:1px solid var(--border-color);">
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1rem;">
+                <div>
+                    <p style="font-size:0.85rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">&copy; 2026 Aspire Inclusion Technologies</p>
+                    <p style="font-size:0.78rem;color:var(--text-muted);margin:0;">Educational financial estimate tool &ndash; not financial advice</p>
+                </div>
+                <div style="display:flex;gap:1.5rem;">
+                    <a href="#" style="font-size:0.8rem;color:var(--text-secondary);text-decoration:none;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">Privacy Policy</a>
+                    <a href="#" style="font-size:0.8rem;color:var(--text-secondary);text-decoration:none;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">Contact</a>
+                </div>
+            </div>
         </footer>
     </div>
 
