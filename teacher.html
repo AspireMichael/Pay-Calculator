@@ -34,13 +34,13 @@
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow-card);
         }
-        .teacher-sidebar .ref-section h3 {
+        .reference-sidebar .ref-section h3 {
             font-size: 0.85rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
             color: var(--text-primary);
         }
-        .teacher-sidebar .ref-row {
+        .reference-sidebar .ref-row {
             display: flex;
             justify-content: space-between;
             padding: 0.25rem 0;
@@ -48,20 +48,15 @@
             color: var(--text-secondary);
             border-bottom: 1px solid var(--border-color);
         }
-        .teacher-sidebar .ref-row:last-child { border-bottom: none; }
-        .teacher-sidebar .ref-row span:last-child { font-weight: 600; color: var(--text-primary); }
-        .teacher-sidebar .ref-note {
+        .reference-sidebar .ref-row:last-child { border-bottom: none; }
+        .reference-sidebar .ref-row span:last-child { font-weight: 600; color: var(--text-primary); }
+        .reference-sidebar .ref-note {
             font-size: 0.78rem;
             color: var(--text-muted);
             margin-top: 0.5rem;
             padding: 0.5rem;
             background: var(--ref-bg);
             border-radius: 8px;
-        }
-
-        @media (max-width: 900px) {
-            .teacher-layout { flex-direction: column; }
-            .teacher-sidebar { width: 100%; position: static; }
         }
     </style>
 </head>
@@ -82,9 +77,10 @@
         </div>
     </header>
 
-    <div class="teacher-layout">
-        <div class="teacher-main">
-            <div class="panel-grid" style="display:block;">
+    <div class="app-container">
+        <div class="main-layout">
+            <main class="main-content">
+                <div class="panel-grid">
                 <!-- Input Card -->
                 <div class="card input-card">
                     <div class="card-header">
@@ -372,10 +368,10 @@
                     </div>
                 </div>
             </div>
-        </div>
+            </main>
 
-        <!-- Reference Sidebar – sits to the right -->
-        <div class="teacher-sidebar">
+        <aside class="reference-sidebar" id="reference-sidebar">
+            <div class="sidebar-content">
             <div class="ref-section">
                 <h3>📊 Pay Scales 2026/27</h3>
                 <div id="sidebar-scales">
@@ -411,8 +407,9 @@
                 <div class="ref-row"><span>Plan 4 (9%)</span><span>£31,395</span></div>
                 <div class="ref-row"><span>Postgrad (6%)</span><span>£21,000</span></div>
             </div>
+            </div>
+        </aside>
         </div>
-    </div>
 
     <!-- Ad Space -->
     <div style="max-width:1200px;margin:1.5rem auto;display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;">
