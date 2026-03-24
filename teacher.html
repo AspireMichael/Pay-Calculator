@@ -72,7 +72,7 @@
                 <div class="logo">🎓</div>
                 <div>
                     <h1>Teacher Pay Calculator</h1>
-                    <p class="subtitle">UK PAY SCALES 2026/27 · ENGLAND (EXCL. LONDON)</p>
+                    <p class="subtitle">UK PAY SCALES 2026/27 · ENGLAND</p>
                 </div>
             </div>
             <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">🌙</button>
@@ -92,44 +92,19 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
+                            <label>Region</label>
+                            <div class="checkbox-group" style="display:flex;gap:1rem;flex-wrap:wrap;">
+                                <label class="checkbox-label"><input type="radio" name="region" value="england" checked><span class="checkmark"></span>Rest of England</label>
+                                <label class="checkbox-label"><input type="radio" name="region" value="fringe"><span class="checkmark"></span>London Fringe</label>
+                                <label class="checkbox-label"><input type="radio" name="region" value="outer"><span class="checkmark"></span>Outer London</label>
+                                <label class="checkbox-label"><input type="radio" name="region" value="inner"><span class="checkmark"></span>Inner London</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <label for="pay-scale">Pay Scale Point</label>
                             <select id="pay-scale" class="input-standard">
-                                <optgroup label="Main Pay Range">
-                                    <option value="M1">M1 – £32,916</option>
-                                    <option value="M2">M2 – £34,823</option>
-                                    <option value="M3">M3 – £37,101</option>
-                                    <option value="M4">M4 – £39,556</option>
-                                    <option value="M5">M5 – £42,057</option>
-                                    <option value="M6">M6 – £45,352</option>
-                                </optgroup>
-                                <optgroup label="Upper Pay Scale">
-                                    <option value="UPS1">UPS1 – £47,472</option>
-                                    <option value="UPS2">UPS2 – £49,232</option>
-                                    <option value="UPS3">UPS3 – £51,048</option>
-                                </optgroup>
-                                <optgroup label="Leadership">
-                                    <option value="L1">L1 – £51,834</option>
-                                    <option value="L2">L2 – £53,104</option>
-                                    <option value="L3">L3 – £54,403</option>
-                                    <option value="L4">L4 – £55,728</option>
-                                    <option value="L5">L5 – £57,089</option>
-                                    <option value="L6">L6 – £58,491</option>
-                                    <option value="L7">L7 – £60,038</option>
-                                    <option value="L8">L8 – £61,398</option>
-                                    <option value="L9">L9 – £62,903</option>
-                                    <option value="L10">L10 – £64,490</option>
-                                    <option value="L11">L11 – £66,135</option>
-                                    <option value="L12">L12 – £67,635</option>
-                                    <option value="L13">L13 – £69,300</option>
-                                    <option value="L14">L14 – £70,998</option>
-                                    <option value="L15">L15 – £72,738</option>
-                                    <option value="L16">L16 – £74,642</option>
-                                    <option value="L17">L17 – £76,331</option>
-                                    <option value="L18">L18 – £78,223</option>
-                                </optgroup>
-                                <optgroup label="Other">
-                                    <option value="custom">Custom Salary…</option>
-                                </optgroup>
+                                <!-- Populated dynamically from JS -->
                             </select>
                         </div>
 
@@ -403,13 +378,9 @@
         <div class="teacher-sidebar">
             <div class="ref-section">
                 <h3>📊 Pay Scales 2026/27</h3>
-                <div class="ref-row"><span>M1</span><span>£32,916</span></div>
-                <div class="ref-row"><span>M6</span><span>£45,352</span></div>
-                <div class="ref-row"><span>UPS1</span><span>£47,472</span></div>
-                <div class="ref-row"><span>UPS3</span><span>£51,048</span></div>
-                <div class="ref-row"><span>L1</span><span>£51,834</span></div>
-                <div class="ref-row"><span>L6</span><span>£58,491</span></div>
-                <div class="ref-row"><span>L18</span><span>£78,223</span></div>
+                <div id="sidebar-scales">
+                    <!-- Populated dynamically from JS -->
+                </div>
             </div>
 
             <div class="ref-section">
@@ -440,6 +411,20 @@
                 <div class="ref-row"><span>Plan 4 (9%)</span><span>£31,395</span></div>
                 <div class="ref-row"><span>Postgrad (6%)</span><span>£21,000</span></div>
             </div>
+        </div>
+    </div>
+
+    <!-- Ad Space -->
+    <div style="max-width:1200px;margin:1.5rem auto;display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;">
+        <div class="ad-slot" style="flex:1;min-width:280px;max-width:550px;background:var(--bg-card);border:2px dashed var(--border-input);border-radius:16px;padding:2rem;text-align:center;">
+            <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:0.5rem;">ASPIRE INCLUSION</p>
+            <p style="font-size:1.1rem;font-weight:600;color:var(--text-primary);">SEND Management Apps for Schools</p>
+            <p style="color:var(--text-secondary);font-size:0.9rem;margin-top:0.5rem;">Your ad content here</p>
+        </div>
+        <div class="ad-slot" style="flex:1;min-width:280px;max-width:550px;background:var(--bg-card);border:2px dashed var(--border-input);border-radius:16px;padding:2rem;text-align:center;">
+            <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:0.5rem;">ASPIRE BM TRAINING</p>
+            <p style="font-size:1.1rem;font-weight:600;color:var(--text-primary);">Professional Development for Business Managers</p>
+            <p style="color:var(--text-secondary);font-size:0.9rem;margin-top:0.5rem;">Your ad content here</p>
         </div>
     </div>
 

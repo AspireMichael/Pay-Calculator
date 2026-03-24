@@ -30,17 +30,64 @@ const STUDENT_LOANS = {
     postgrad: { threshold: 21000, rate: 0.06 },
 };
 
-// ===== Teacher Pay Scales 2025/26 (England excl. London) – 4% uplift =====
+// ===== Teacher Pay Scales 2025/26 – All regions (4% uplift) =====
 const TEACHER_PAY = {
-    // Main Pay Range
-    M1: 32916, M2: 34823, M3: 37101, M4: 39556, M5: 42057, M6: 45352,
-    // Upper Pay Scale
-    UPS1: 47472, UPS2: 49232, UPS3: 51048,
-    // Leadership
-    L1: 51834, L2: 53104, L3: 54403, L4: 55728, L5: 57089,
-    L6: 58491, L7: 60038, L8: 61398, L9: 62903, L10: 64490,
-    L11: 66135, L12: 67635, L13: 69300, L14: 70998, L15: 72738,
-    L16: 74642, L17: 76331, L18: 78223,
+    england: {
+        label: 'Rest of England',
+        M1: 32916, M2: 34823, M3: 37101, M4: 39556, M5: 42057, M6: 45352,
+        UPS1: 47472, UPS2: 49232, UPS3: 51048,
+        L1: 51834, L2: 53104, L3: 54403, L4: 55728, L5: 57089,
+        L6: 58491, L7: 60038, L8: 61398, L9: 62903, L10: 64490,
+        L11: 66135, L12: 67635, L13: 69300, L14: 70998, L15: 72738,
+        L16: 74642, L17: 76331, L18: 78223, L19: 80655, L20: 82654,
+        L21: 84699, L22: 86803, L23: 88951, L24: 91158, L25: 93424,
+        L26: 95735, L27: 98106, L28: 100540, L29: 103030, L30: 105595,
+        L31: 108202, L32: 110892, L33: 113646, L34: 116456, L35: 119350,
+        L36: 122306, L37: 125345, L38: 128447, L39: 131578, L40: 134860,
+        L41: 138230, L42: 141693, L43: 143796,
+    },
+    fringe: {
+        label: 'London Fringe',
+        M1: 34398, M2: 36305, M3: 38583, M4: 41038, M5: 43539, M6: 46839,
+        UPS1: 48913, UPS2: 50673, UPS3: 52490,
+        L1: 53198, L2: 54468, L3: 55767, L4: 57092, L5: 58453,
+        L6: 59855, L7: 61402, L8: 62762, L9: 64267, L10: 65854,
+        L11: 67499, L12: 68999, L13: 70664, L14: 72362, L15: 74102,
+        L16: 76006, L17: 77695, L18: 79587, L19: 82019, L20: 84018,
+        L21: 86063, L22: 88167, L23: 90315, L24: 92522, L25: 94788,
+        L26: 97099, L27: 99470, L28: 101904, L29: 104394, L30: 106959,
+        L31: 109566, L32: 112256, L33: 115010, L34: 117820, L35: 120714,
+        L36: 123670, L37: 126709, L38: 129811, L39: 132942, L40: 136224,
+        L41: 139594, L42: 143057, L43: 145218,
+    },
+    outer: {
+        label: 'Outer London',
+        M1: 37870, M2: 39777, M3: 42055, M4: 44510, M5: 47011, M6: 50474,
+        UPS1: 52219, UPS2: 53979, UPS3: 56154,
+        L1: 55881, L2: 57151, L3: 58450, L4: 59775, L5: 61136,
+        L6: 62538, L7: 64085, L8: 65445, L9: 66950, L10: 68537,
+        L11: 70182, L12: 71682, L13: 73347, L14: 75045, L15: 76785,
+        L16: 78689, L17: 80378, L18: 82270, L19: 84702, L20: 86701,
+        L21: 88746, L22: 90850, L23: 92998, L24: 95205, L25: 97471,
+        L26: 99782, L27: 102153, L28: 104587, L29: 107077, L30: 109642,
+        L31: 112249, L32: 114939, L33: 117693, L34: 120503, L35: 123397,
+        L36: 126353, L37: 129392, L38: 132494, L39: 135625, L40: 138907,
+        L41: 142277, L42: 145740, L43: 147866,
+    },
+    inner: {
+        label: 'Inner London',
+        M1: 40317, M2: 42524, M3: 44499, M4: 46547, M5: 50040, M6: 52300,
+        UPS1: 56199, UPS2: 58131, UPS3: 62496,
+        L1: 61554, L2: 62824, L3: 64123, L4: 65448, L5: 66809,
+        L6: 68211, L7: 69758, L8: 71118, L9: 72623, L10: 74210,
+        L11: 75855, L12: 77355, L13: 79020, L14: 80718, L15: 82458,
+        L16: 84362, L17: 86051, L18: 87943, L19: 90375, L20: 92374,
+        L21: 94419, L22: 96523, L23: 98671, L24: 100878, L25: 103144,
+        L26: 105455, L27: 107826, L28: 110260, L29: 112750, L30: 115315,
+        L31: 117922, L32: 120612, L33: 123366, L34: 126176, L35: 129070,
+        L36: 132026, L37: 135065, L38: 138167, L39: 141298, L40: 144580,
+        L41: 147950, L42: 151413, L43: 153490,
+    },
 };
 
 // TLR Payments 2025/26 (4% uplift)
@@ -214,15 +261,85 @@ function getPensionAmounts(salary) {
     }
 }
 
+// ===== Get selected region =====
+function getSelectedRegion() {
+    const checked = document.querySelector('input[name="region"]:checked');
+    return checked ? checked.value : 'england';
+}
+
+// ===== Populate pay scale dropdown for selected region =====
+function populatePayScaleDropdown() {
+    const region = getSelectedRegion();
+    const payScales = TEACHER_PAY[region];
+    const select = $('#pay-scale');
+    const currentValue = select.value;
+    select.innerHTML = '';
+
+    const fmt = n => '£' + n.toLocaleString('en-GB');
+
+    const groups = [
+        { label: 'Main Pay Range', keys: ['M1','M2','M3','M4','M5','M6'] },
+        { label: 'Upper Pay Scale', keys: ['UPS1','UPS2','UPS3'] },
+        { label: 'Leadership', keys: [] },
+        { label: 'Other', keys: ['custom'] },
+    ];
+
+    // Build leadership keys dynamically (L1 to L43)
+    for (let i = 1; i <= 43; i++) {
+        if (payScales['L' + i] !== undefined) groups[2].keys.push('L' + i);
+    }
+
+    for (const group of groups) {
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = group.label;
+        for (const key of group.keys) {
+            const option = document.createElement('option');
+            option.value = key;
+            if (key === 'custom') {
+                option.textContent = 'Custom Salary…';
+            } else {
+                option.textContent = `${key} – ${fmt(payScales[key])}`;
+            }
+            optgroup.appendChild(option);
+        }
+        select.appendChild(optgroup);
+    }
+
+    // Restore selection if it still exists
+    if (currentValue && select.querySelector(`option[value="${currentValue}"]`)) {
+        select.value = currentValue;
+    }
+
+    // Update sidebar reference
+    updateSidebarScales(payScales, TEACHER_PAY[region].label);
+}
+
+function updateSidebarScales(payScales, regionLabel) {
+    const container = $('#sidebar-scales');
+    if (!container) return;
+    const fmt = n => '£' + n.toLocaleString('en-GB');
+    container.innerHTML = `
+        <div class="ref-row"><span>M1</span><span>${fmt(payScales.M1)}</span></div>
+        <div class="ref-row"><span>M6</span><span>${fmt(payScales.M6)}</span></div>
+        <div class="ref-row"><span>UPS1</span><span>${fmt(payScales.UPS1)}</span></div>
+        <div class="ref-row"><span>UPS3</span><span>${fmt(payScales.UPS3)}</span></div>
+        <div class="ref-row"><span>L1</span><span>${fmt(payScales.L1)}</span></div>
+        <div class="ref-row"><span>L18</span><span>${fmt(payScales.L18)}</span></div>
+        <div class="ref-row"><span>L43</span><span>${fmt(payScales.L43)}</span></div>
+    `;
+}
+
 // ===== Update salary display =====
 function updateSalaryFromScale() {
+    const region = getSelectedRegion();
+    const payScales = TEACHER_PAY[region];
     const scaleValue = $('#pay-scale').value;
     const tlrValue = $('#tlr-payment').value;
     const senValue = $('#sen-allowance').value;
 
     let baseSalary = 0;
     if (scaleValue && scaleValue !== 'custom') {
-        baseSalary = TEACHER_PAY[scaleValue] || 0;
+        baseSalary = payScales[scaleValue] || 0;
     } else if (scaleValue === 'custom') {
         baseSalary = parseFloat($('#custom-salary').value) || 0;
     }
@@ -385,6 +502,7 @@ function shareCalculation() {
     const scale = $('#pay-scale').value;
     if (!scale) { alert('Calculate first!'); return; }
     const params = new URLSearchParams();
+    params.set('region', getSelectedRegion());
     params.set('scale', scale);
     if (scale === 'custom') params.set('salary', $('#custom-salary').value);
     params.set('tlr', $('#tlr-payment').value);
@@ -424,6 +542,11 @@ function shareCalculation() {
 
 function loadFromUrl() {
     const params = new URLSearchParams(window.location.search);
+    if (params.has('region')) {
+        const regionRadio = document.querySelector(`input[name="region"][value="${params.get('region')}"]`);
+        if (regionRadio) regionRadio.checked = true;
+        populatePayScaleDropdown();
+    }
     if (!params.has('scale')) return;
     $('#pay-scale').value = params.get('scale');
     if (params.get('scale') === 'custom' && params.has('salary')) {
@@ -467,6 +590,16 @@ document.addEventListener('DOMContentLoaded', () => {
         $('#pension-custom').classList.add('active');
         $('#pension-tps').classList.remove('active');
         $('#custom-pension-inputs').style.display = 'block';
+    });
+
+    populatePayScaleDropdown();
+
+    // Region change
+    document.querySelectorAll('input[name="region"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+            populatePayScaleDropdown();
+            updateSalaryFromScale();
+        });
     });
 
     $('#pay-scale').addEventListener('change', updateSalaryFromScale);
