@@ -929,33 +929,30 @@ function calculateHiring() {
     setText('hire-cmp-payroll-after', formatCurrency(currentPayroll + newSalary));
     setText('hire-cmp-payroll-change', `+${formatCurrency(newSalary)}`);
 
-    // NI breakdown rows
-    setText('hire-cmp-erni-existing-before', formatCurrency(existingErNI));
-    setText('hire-cmp-erni-existing-after', formatCurrency(existingErNI));
-    setText('hire-cmp-erni-newhire', formatCurrency(newHireErNI));
-    setText('hire-cmp-erni-newhire-change', `+${formatCurrency(newHireErNI)}`);
+    // NI row — show effective totals
+    setText('hire-cmp-erni-before', formatCurrency(effectiveErNI_before));
+    setText('hire-cmp-erni-after', formatCurrency(effectiveErNI_after));
+    const niDiff = effectiveErNI_after - effectiveErNI_before;
+    const niChangeEl = $('#hire-cmp-erni-change');
+    if (niDiff < 0) {
+        niChangeEl.innerHTML = `<span style="color:var(--accent-green);">${formatCurrency(niDiff)}</span>`;
+    } else {
+        niChangeEl.textContent = `+${formatCurrency(niDiff)}`;
+    }
 
-    // Employment Allowance row
+    // EA note
     const eaRow = $('#hire-row-ea');
     if (useEA) {
         eaRow.style.display = '';
-        setText('hire-cmp-ea-before', existingHeadcount >= 2 ? `-${formatCurrency(eaSavingBefore)}` : 'Not eligible (sole director)');
-        setText('hire-cmp-ea-after', afterHeadcount >= 2 ? `-${formatCurrency(eaSavingAfter)}` : 'Not eligible');
-        const eaDiff = eaSavingAfter - eaSavingBefore;
-        setText('hire-cmp-ea-change', eaDiff > 0 ? `-${formatCurrency(eaDiff)} saved` : '–');
+        let note = '';
+        if (existingHeadcount < 2 && afterHeadcount >= 2) {
+            note = `✓ Hiring unlocks Employment Allowance (${formatCurrency(EMPLOYER_NI.employmentAllowance)}) — saves ${formatCurrency(eaSavingAfter)} off total Employer NI`;
+        } else if (eaSavingAfter > 0) {
+            note = `✓ Employment Allowance saves ${formatCurrency(eaSavingAfter)} off total Employer NI`;
+        }
+        $('#hire-ea-note').textContent = note;
     } else {
         eaRow.style.display = 'none';
-    }
-
-    // Effective Employer NI
-    $('#hire-cmp-erni-eff-before').innerHTML = `<strong>${formatCurrency(effectiveErNI_before)}</strong>`;
-    $('#hire-cmp-erni-eff-after').innerHTML = `<strong>${formatCurrency(effectiveErNI_after)}</strong>`;
-    const niDiff = effectiveErNI_after - effectiveErNI_before;
-    const niDiffEl = $('#hire-cmp-erni-eff-change');
-    if (niDiff < 0) {
-        niDiffEl.innerHTML = `<strong style="color:var(--accent-green);">${formatCurrency(niDiff)}</strong>`;
-    } else {
-        niDiffEl.innerHTML = `<strong class="negative-text">+${formatCurrency(niDiff)}</strong>`;
     }
 
     setText('hire-cmp-pension', formatCurrency(newPension));
