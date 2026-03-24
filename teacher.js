@@ -519,9 +519,10 @@ function shareCalculation() {
     const shareUrl = `${baseUrl}?${params.toString()}`;
 
     if (navigator.share) {
+        const monthly = document.getElementById('res-monthly')?.textContent || '';
         navigator.share({
             title: 'Teacher Take-Home Pay Calculator',
-            text: `Check out my teacher take-home pay calculation`,
+            text: `My teacher take-home pay: ${monthly}/month. Check yours here!`,
             url: shareUrl
         }).catch(() => {});
     } else {

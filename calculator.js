@@ -1444,9 +1444,11 @@ function shareCalculation() {
 
     // Try native share API first (mobile), fallback to clipboard
     if (navigator.share) {
+        const monthlyEl = document.getElementById('res-emp-monthly-net');
+        const monthlyPay = monthlyEl?.textContent || '';
         navigator.share({
-            title: `UK Take-Home Pay: ${formatCurrency(parseFloat(salary))} salary`,
-            text: `Check out my UK take-home pay calculation for a £${Number(salary).toLocaleString()} salary`,
+            title: `UK Take-Home Pay Calculator`,
+            text: `My take-home pay on a £${Number(salary).toLocaleString()} salary: ${monthlyPay}/month. Check yours here!`,
             url: shareUrl
         }).catch(() => {});
     } else {
