@@ -929,21 +929,34 @@ function calculateHiring() {
     setText('hire-cmp-payroll-after', formatCurrency(currentPayroll + newSalary));
     setText('hire-cmp-payroll-change', `+${formatCurrency(newSalary)}`);
 
-    let erniLabel = formatCurrency(Math.abs(effectiveNewErNI));
-    let erniChangeLabel = '';
-    if (effectiveNewErNI < 0) {
-        // Hiring triggers EA — actually saves NI overall
-        erniLabel = `-${formatCurrency(Math.abs(effectiveNewErNI))}`;
-        erniChangeLabel = `${erniLabel} (EA now eligible — saves ${formatCurrency(eaSavingAfter)} on total NI)`;
-        erniLabel = erniChangeLabel;
-    } else if (useEA && effectiveNewErNI < newHireErNI) {
-        erniLabel = `${formatCurrency(effectiveNewErNI)} (EA saves ${formatCurrency(newHireErNI - effectiveNewErNI)})`;
-        erniChangeLabel = `+${erniLabel}`;
+    // NI breakdown rows
+    setText('hire-cmp-erni-existing-before', formatCurrency(existingErNI));
+    setText('hire-cmp-erni-existing-after', formatCurrency(existingErNI));
+    setText('hire-cmp-erni-newhire', formatCurrency(newHireErNI));
+    setText('hire-cmp-erni-newhire-change', `+${formatCurrency(newHireErNI)}`);
+
+    // Employment Allowance row
+    const eaRow = $('#hire-row-ea');
+    if (useEA) {
+        eaRow.style.display = '';
+        setText('hire-cmp-ea-before', existingHeadcount >= 2 ? `-${formatCurrency(eaSavingBefore)}` : 'Not eligible (sole director)');
+        setText('hire-cmp-ea-after', afterHeadcount >= 2 ? `-${formatCurrency(eaSavingAfter)}` : 'Not eligible');
+        const eaDiff = eaSavingAfter - eaSavingBefore;
+        setText('hire-cmp-ea-change', eaDiff > 0 ? `-${formatCurrency(eaDiff)} saved` : '–');
     } else {
-        erniChangeLabel = `+${erniLabel}`;
+        eaRow.style.display = 'none';
     }
-    setText('hire-cmp-erni', erniLabel);
-    setText('hire-cmp-erni-change', erniChangeLabel);
+
+    // Effective Employer NI
+    $('#hire-cmp-erni-eff-before').innerHTML = `<strong>${formatCurrency(effectiveErNI_before)}</strong>`;
+    $('#hire-cmp-erni-eff-after').innerHTML = `<strong>${formatCurrency(effectiveErNI_after)}</strong>`;
+    const niDiff = effectiveErNI_after - effectiveErNI_before;
+    const niDiffEl = $('#hire-cmp-erni-eff-change');
+    if (niDiff < 0) {
+        niDiffEl.innerHTML = `<strong style="color:var(--accent-green);">${formatCurrency(niDiff)}</strong>`;
+    } else {
+        niDiffEl.innerHTML = `<strong class="negative-text">+${formatCurrency(niDiff)}</strong>`;
+    }
 
     setText('hire-cmp-pension', formatCurrency(newPension));
     setText('hire-cmp-pension-change', `+${formatCurrency(newPension)}`);
