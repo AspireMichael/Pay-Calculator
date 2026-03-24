@@ -217,6 +217,7 @@ function initTheme() {
     const toggle = $('#themeToggle');
     const saved = localStorage.getItem('theme') || 'dark';
     document.documentElement.setAttribute('data-theme', saved);
+    if (!toggle) return;
 
     toggle.addEventListener('click', () => {
         const current = document.documentElement.getAttribute('data-theme');
@@ -229,32 +230,40 @@ function initTheme() {
 // ===== Pension Toggle =====
 function initPensionToggle() {
     // Employee tab pension toggle
-    $('#pension-standard').addEventListener('click', () => {
-        $('#pension-standard').classList.add('active');
-        $('#pension-custom').classList.remove('active');
-        $('#pension-standard-info').classList.remove('hidden');
-        $('#pension-custom-info').classList.add('hidden');
-    });
+    if ($('#pension-standard')) {
+        $('#pension-standard').addEventListener('click', () => {
+            $('#pension-standard').classList.add('active');
+            $('#pension-custom').classList.remove('active');
+            $('#pension-standard-info').classList.remove('hidden');
+            $('#pension-custom-info').classList.add('hidden');
+        });
+    }
 
-    $('#pension-custom').addEventListener('click', () => {
-        $('#pension-custom').classList.add('active');
-        $('#pension-standard').classList.remove('active');
-        $('#pension-custom-info').classList.remove('hidden');
-        $('#pension-standard-info').classList.add('hidden');
-    });
+    if ($('#pension-custom')) {
+        $('#pension-custom').addEventListener('click', () => {
+            $('#pension-custom').classList.add('active');
+            $('#pension-standard').classList.remove('active');
+            $('#pension-custom-info').classList.remove('hidden');
+            $('#pension-standard-info').classList.add('hidden');
+        });
+    }
 
     // Employer tab pension toggle
-    $('#er-pension-standard').addEventListener('click', () => {
-        $('#er-pension-standard').classList.add('active');
-        $('#er-pension-custom').classList.remove('active');
-        $('#er-pension-custom-info').classList.add('hidden');
-    });
+    if ($('#er-pension-standard')) {
+        $('#er-pension-standard').addEventListener('click', () => {
+            $('#er-pension-standard').classList.add('active');
+            $('#er-pension-custom').classList.remove('active');
+            $('#er-pension-custom-info').classList.add('hidden');
+        });
+    }
 
-    $('#er-pension-custom').addEventListener('click', () => {
-        $('#er-pension-custom').classList.add('active');
-        $('#er-pension-standard').classList.remove('active');
-        $('#er-pension-custom-info').classList.remove('hidden');
-    });
+    if ($('#er-pension-custom')) {
+        $('#er-pension-custom').addEventListener('click', () => {
+            $('#er-pension-custom').classList.add('active');
+            $('#er-pension-standard').classList.remove('active');
+            $('#er-pension-custom-info').classList.remove('hidden');
+        });
+    }
 }
 
 // ===== Sidebar Toggle (Mobile) =====
@@ -290,7 +299,8 @@ function initMode() {
 
 function setMode(mode) {
     $$('.mode-btn').forEach(b => b.classList.remove('active'));
-    $(`[data-mode="${mode}"]`).classList.add('active');
+    const modeEl = $(`[data-mode="${mode}"]`);
+    if (modeEl) modeEl.classList.add('active');
 
     if (mode === 'personal') {
         document.body.classList.add('personal-mode');
@@ -1274,42 +1284,42 @@ const STORAGE_KEY = 'uk-emp-calc-data';
 function saveState() {
     const state = {
         // Active tab
-        activeTab: $('.tab-btn.active')?.dataset.tab || 'employee',
+        activeTab: $('.tab-btn.active')?.dataset?.tab || 'employee',
 
         // Employee tab
-        salaryIsMonthly: $('#salary-monthly').classList.contains('active'),
-        empSalary: $('#emp-salary').value,
-        empTaxCode: $('#emp-tax-code').value,
-        empSlPlan1: $('#emp-sl-plan1').checked,
-        empSlPlan2: $('#emp-sl-plan2').checked,
-        empSlPlan4: $('#emp-sl-plan4').checked,
-        empSlPlan5: $('#emp-sl-plan5').checked,
-        empSlPostgrad: $('#emp-sl-postgrad').checked,
-        empPensionStandard: $('#pension-standard').classList.contains('active'),
-        empPensionEmployee: $('#emp-pension-employee').value,
-        empPensionEmployer: $('#emp-pension-employer').value,
-        empChildren: $('#emp-children').value,
+        salaryIsMonthly: $('#salary-monthly')?.classList?.contains('active') || false,
+        empSalary: $('#emp-salary')?.value || '',
+        empTaxCode: $('#emp-tax-code')?.value || '',
+        empSlPlan1: $('#emp-sl-plan1')?.checked || false,
+        empSlPlan2: $('#emp-sl-plan2')?.checked || false,
+        empSlPlan4: $('#emp-sl-plan4')?.checked || false,
+        empSlPlan5: $('#emp-sl-plan5')?.checked || false,
+        empSlPostgrad: $('#emp-sl-postgrad')?.checked || false,
+        empPensionStandard: $('#pension-standard')?.classList?.contains('active') ?? true,
+        empPensionEmployee: $('#emp-pension-employee')?.value || '',
+        empPensionEmployer: $('#emp-pension-employer')?.value || '',
+        empChildren: $('#emp-children')?.value || '0',
 
         // Employer tab
-        erSalaryIsMonthly: $('#er-salary-monthly').classList.contains('active'),
-        erSalary: $('#er-salary').value,
-        erPensionStandard: $('#er-pension-standard').classList.contains('active'),
-        erPensionPct: $('#er-pension-pct').value,
-        erEmploymentAllowance: $('#er-employment-allowance').checked,
+        erSalaryIsMonthly: $('#er-salary-monthly')?.classList?.contains('active') || false,
+        erSalary: $('#er-salary')?.value || '',
+        erPensionStandard: $('#er-pension-standard')?.classList?.contains('active') ?? true,
+        erPensionPct: $('#er-pension-pct')?.value || '',
+        erEmploymentAllowance: $('#er-employment-allowance')?.checked || false,
         additionalCosts: additionalCosts,
 
         // Hiring tab
-        hireRevenue: $('#hire-revenue').value,
-        hireProfit: $('#hire-profit').value,
-        hireCurrentPayroll: $('#hire-current-payroll').value,
-        hireEmploymentAllowance: $('#hire-employment-allowance').checked,
+        hireRevenue: $('#hire-revenue')?.value || '',
+        hireProfit: $('#hire-profit')?.value || '',
+        hireCurrentPayroll: $('#hire-current-payroll')?.value || '',
+        hireEmploymentAllowance: $('#hire-employment-allowance')?.checked || false,
         currentEmployees: currentEmployees,
-        hireNewSalary: $('#hire-new-salary').value,
-        hireNewPension: $('#hire-new-pension').value,
-        hireNewExtras: $('#hire-new-extras').value,
+        hireNewSalary: $('#hire-new-salary')?.value || '',
+        hireNewPension: $('#hire-new-pension')?.value || '',
+        hireNewExtras: $('#hire-new-extras')?.value || '',
 
         // Pay Rise tab
-        prWorkforcePct: $('#pr-workforce-pct').value,
+        prWorkforcePct: $('#pr-workforce-pct')?.value || '',
         prEmployees: prEmployees,
     };
 
@@ -1326,54 +1336,51 @@ function loadState() {
         if (!raw) return;
         const state = JSON.parse(raw);
 
+        // Safe element helpers
+        const safeClick = (sel) => { const el = $(sel); if (el) el.click(); };
+        const safeVal = (sel, val) => { const el = $(sel); if (el) el.value = val; };
+        const safeCheck = (sel, val) => { const el = $(sel); if (el) el.checked = val; };
+
         // Employee tab
-        if (state.salaryIsMonthly) {
-            $('#salary-monthly').click();
-        }
-        if (state.empSalary) $('#emp-salary').value = state.empSalary;
-        if (state.empTaxCode) $('#emp-tax-code').value = state.empTaxCode;
-        if (state.empSlPlan1) $('#emp-sl-plan1').checked = state.empSlPlan1;
-        if (state.empSlPlan2) $('#emp-sl-plan2').checked = state.empSlPlan2;
-        if (state.empSlPlan4) $('#emp-sl-plan4').checked = state.empSlPlan4;
-        if (state.empSlPlan5) $('#emp-sl-plan5').checked = state.empSlPlan5;
-        if (state.empSlPostgrad) $('#emp-sl-postgrad').checked = state.empSlPostgrad;
-        if (state.empPensionStandard === false) {
-            $('#pension-custom').click();
-        }
-        if (state.empPensionEmployee) $('#emp-pension-employee').value = state.empPensionEmployee;
-        if (state.empPensionEmployer) $('#emp-pension-employer').value = state.empPensionEmployer;
-        if (state.empChildren) $('#emp-children').value = state.empChildren;
+        if (state.salaryIsMonthly) safeClick('#salary-monthly');
+        if (state.empSalary) safeVal('#emp-salary', state.empSalary);
+        if (state.empTaxCode) safeVal('#emp-tax-code', state.empTaxCode);
+        if (state.empSlPlan1) safeCheck('#emp-sl-plan1', state.empSlPlan1);
+        if (state.empSlPlan2) safeCheck('#emp-sl-plan2', state.empSlPlan2);
+        if (state.empSlPlan4) safeCheck('#emp-sl-plan4', state.empSlPlan4);
+        if (state.empSlPlan5) safeCheck('#emp-sl-plan5', state.empSlPlan5);
+        if (state.empSlPostgrad) safeCheck('#emp-sl-postgrad', state.empSlPostgrad);
+        if (state.empPensionStandard === false) safeClick('#pension-custom');
+        if (state.empPensionEmployee) safeVal('#emp-pension-employee', state.empPensionEmployee);
+        if (state.empPensionEmployer) safeVal('#emp-pension-employer', state.empPensionEmployer);
+        if (state.empChildren) safeVal('#emp-children', state.empChildren);
 
         // Employer tab
-        if (state.erSalaryIsMonthly) {
-            $('#er-salary-monthly').click();
-        }
-        if (state.erSalary) $('#er-salary').value = state.erSalary;
-        if (state.erPensionStandard === false) {
-            $('#er-pension-custom').click();
-        }
-        if (state.erPensionPct) $('#er-pension-pct').value = state.erPensionPct;
-        if (state.erEmploymentAllowance) $('#er-employment-allowance').checked = state.erEmploymentAllowance;
+        if (state.erSalaryIsMonthly) safeClick('#er-salary-monthly');
+        if (state.erSalary) safeVal('#er-salary', state.erSalary);
+        if (state.erPensionStandard === false) safeClick('#er-pension-custom');
+        if (state.erPensionPct) safeVal('#er-pension-pct', state.erPensionPct);
+        if (state.erEmploymentAllowance) safeCheck('#er-employment-allowance', state.erEmploymentAllowance);
         if (state.additionalCosts && state.additionalCosts.length > 0) {
             additionalCosts = state.additionalCosts;
             renderAdditionalCosts();
         }
 
         // Hiring tab
-        if (state.hireRevenue) $('#hire-revenue').value = state.hireRevenue;
-        if (state.hireProfit) $('#hire-profit').value = state.hireProfit;
-        if (state.hireCurrentPayroll) $('#hire-current-payroll').value = state.hireCurrentPayroll;
-        if (state.hireEmploymentAllowance) $('#hire-employment-allowance').checked = state.hireEmploymentAllowance;
+        if (state.hireRevenue) safeVal('#hire-revenue', state.hireRevenue);
+        if (state.hireProfit) safeVal('#hire-profit', state.hireProfit);
+        if (state.hireCurrentPayroll) safeVal('#hire-current-payroll', state.hireCurrentPayroll);
+        if (state.hireEmploymentAllowance) safeCheck('#hire-employment-allowance', state.hireEmploymentAllowance);
         if (state.currentEmployees && state.currentEmployees.length > 0) {
             currentEmployees = state.currentEmployees;
             renderEmployees();
         }
-        if (state.hireNewSalary) $('#hire-new-salary').value = state.hireNewSalary;
-        if (state.hireNewPension) $('#hire-new-pension').value = state.hireNewPension;
-        if (state.hireNewExtras) $('#hire-new-extras').value = state.hireNewExtras;
+        if (state.hireNewSalary) safeVal('#hire-new-salary', state.hireNewSalary);
+        if (state.hireNewPension) safeVal('#hire-new-pension', state.hireNewPension);
+        if (state.hireNewExtras) safeVal('#hire-new-extras', state.hireNewExtras);
 
         // Pay Rise tab
-        if (state.prWorkforcePct) $('#pr-workforce-pct').value = state.prWorkforcePct;
+        if (state.prWorkforcePct) safeVal('#pr-workforce-pct', state.prWorkforcePct);
         if (state.prEmployees && state.prEmployees.length > 0) {
             prEmployees = state.prEmployees;
             renderPrEmployees();
@@ -1462,29 +1469,39 @@ function loadFromUrl() {
     const params = new URLSearchParams(window.location.search);
     if (!params.has('s')) return;
 
-    $('#emp-salary').value = params.get('s');
-    if (params.has('tc')) $('#emp-tax-code').value = params.get('tc');
-    if (params.get('sl1') === '1') $('#emp-sl-plan1').checked = true;
-    if (params.get('sl2') === '1') $('#emp-sl-plan2').checked = true;
-    if (params.get('sl4') === '1') $('#emp-sl-plan4').checked = true;
-    if (params.get('sl5') === '1') $('#emp-sl-plan5').checked = true;
-    if (params.get('slpg') === '1') $('#emp-sl-postgrad').checked = true;
+    const safeVal = (sel, val) => { const el = $(sel); if (el) el.value = val; };
+    const safeCheck = (sel, val) => { const el = $(sel); if (el) el.checked = val; };
+    const safeClick = (sel) => { const el = $(sel); if (el) el.click(); };
+
+    safeVal('#emp-salary', params.get('s'));
+    if (params.has('tc')) safeVal('#emp-tax-code', params.get('tc'));
+    if (params.get('sl1') === '1') safeCheck('#emp-sl-plan1', true);
+    if (params.get('sl2') === '1') safeCheck('#emp-sl-plan2', true);
+    if (params.get('sl4') === '1') safeCheck('#emp-sl-plan4', true);
+    if (params.get('sl5') === '1') safeCheck('#emp-sl-plan5', true);
+    if (params.get('slpg') === '1') safeCheck('#emp-sl-postgrad', true);
 
     if (params.has('pe')) {
-        $('#pension-custom').click();
-        $('#emp-pension-employee').value = params.get('pe');
-        $('#emp-pension-employer').value = params.get('pr') || '0';
+        safeClick('#pension-custom');
+        safeVal('#emp-pension-employee', params.get('pe'));
+        safeVal('#emp-pension-employer', params.get('pr') || '0');
     }
 
-    if (params.has('ch')) $('#emp-children').value = params.get('ch');
+    if (params.has('ch')) safeVal('#emp-children', params.get('ch'));
 
     // Auto-calculate
-    setTimeout(() => calculateEmployee(), 100);
+    if ($('#btn-calc-employee')) setTimeout(() => calculateEmployee(), 100);
 }
 
 // ===== Print =====
 function printResults() {
     window.print();
+}
+
+// ===== Safe bind helper =====
+function bind(selector, event, handler) {
+    const el = $(selector);
+    if (el) el.addEventListener(event, handler);
 }
 
 // ===== Init =====
@@ -1495,15 +1512,15 @@ document.addEventListener('DOMContentLoaded', () => {
     initSidebar();
     initMode();
 
-    // Salary toggle (annual/monthly)
-    $('#salary-annual').addEventListener('click', () => {
+    // Salary toggle (annual/monthly) — personal page
+    bind('#salary-annual', 'click', () => {
         $('#salary-annual').classList.add('active');
         $('#salary-monthly').classList.remove('active');
         $('#emp-salary').placeholder = 'e.g. 35000';
         $('#emp-salary').step = '100';
         $('#salary-conversion').style.display = 'none';
     });
-    $('#salary-monthly').addEventListener('click', () => {
+    bind('#salary-monthly', 'click', () => {
         $('#salary-monthly').classList.add('active');
         $('#salary-annual').classList.remove('active');
         $('#emp-salary').placeholder = 'e.g. 2917';
@@ -1516,15 +1533,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Employer salary toggle (annual/monthly)
-    $('#er-salary-annual').addEventListener('click', () => {
+    // Employer salary toggle (annual/monthly) — business page
+    bind('#er-salary-annual', 'click', () => {
         $('#er-salary-annual').classList.add('active');
         $('#er-salary-monthly').classList.remove('active');
         $('#er-salary').placeholder = 'e.g. 35000';
         $('#er-salary').step = '100';
         $('#er-salary-conversion').style.display = 'none';
     });
-    $('#er-salary-monthly').addEventListener('click', () => {
+    bind('#er-salary-monthly', 'click', () => {
         $('#er-salary-monthly').classList.add('active');
         $('#er-salary-annual').classList.remove('active');
         $('#er-salary').placeholder = 'e.g. 2917';
@@ -1537,42 +1554,42 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    $('#btn-calc-employee').addEventListener('click', calculateEmployee);
-    $('#btn-calc-employer').addEventListener('click', calculateEmployer);
-    $('#btn-calc-hiring').addEventListener('click', calculateHiring);
-    $('#btn-calc-payroll').addEventListener('click', calculatePayrollSummary);
-    $('#btn-calc-payrise').addEventListener('click', calculatePayRise);
+    // Calculate buttons
+    bind('#btn-calc-employee', 'click', calculateEmployee);
+    bind('#btn-calc-employer', 'click', calculateEmployer);
+    bind('#btn-calc-hiring', 'click', calculateHiring);
+    bind('#btn-calc-payroll', 'click', calculatePayrollSummary);
+    bind('#btn-calc-payrise', 'click', calculatePayRise);
 
-    // Additional costs
-    $('#btn-add-cost').addEventListener('click', () => { addAdditionalCost(); saveState(); });
-    // Allow enter key to add cost
-    $('#add-cost-amount').addEventListener('keypress', (e) => {
+    // Additional costs — business page
+    bind('#btn-add-cost', 'click', () => { addAdditionalCost(); saveState(); });
+    bind('#add-cost-amount', 'keypress', (e) => {
         if (e.key === 'Enter') { addAdditionalCost(); saveState(); }
     });
-    $('#add-cost-name').addEventListener('keypress', (e) => {
+    bind('#add-cost-name', 'keypress', (e) => {
         if (e.key === 'Enter') { addAdditionalCost(); saveState(); }
     });
 
-    // Add employee buttons
-    $('#btn-add-employee').addEventListener('click', () => { addEmployeeRow(); saveState(); });
-    $('#btn-add-pr-employee').addEventListener('click', () => { addPrEmployeeRow(); saveState(); });
-    $('#btn-apply-workforce-raise').addEventListener('click', () => { applyWorkforceRaise(); saveState(); });
-    $('#btn-copy-from-hiring').addEventListener('click', copyFromHiring);
+    // Add employee buttons — business page
+    bind('#btn-add-employee', 'click', () => { addEmployeeRow(); saveState(); });
+    bind('#btn-add-pr-employee', 'click', () => { addPrEmployeeRow(); saveState(); });
+    bind('#btn-apply-workforce-raise', 'click', () => { applyWorkforceRaise(); saveState(); });
+    bind('#btn-copy-from-hiring', 'click', copyFromHiring);
 
     // Allow enter key to trigger calculations
-    $('#emp-salary').addEventListener('keypress', (e) => {
+    bind('#emp-salary', 'keypress', (e) => {
         if (e.key === 'Enter') calculateEmployee();
     });
-    $('#er-salary').addEventListener('keypress', (e) => {
+    bind('#er-salary', 'keypress', (e) => {
         if (e.key === 'Enter') calculateEmployer();
     });
-    $('#hire-new-salary').addEventListener('keypress', (e) => {
+    bind('#hire-new-salary', 'keypress', (e) => {
         if (e.key === 'Enter') calculateHiring();
     });
 
     // Print & Share
-    $('#btn-print-employee').addEventListener('click', printResults);
-    $('#btn-share-employee').addEventListener('click', shareCalculation);
+    bind('#btn-print-employee', 'click', printResults);
+    bind('#btn-share-employee', 'click', shareCalculation);
 
     // Load saved state and start auto-saving
     loadState();
