@@ -113,6 +113,24 @@ a:focus-visible {
     border-radius: 8px;
 }
 
+/* ===== Fieldset Reset (Accessibility) ===== */
+fieldset {
+    min-width: 0;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+fieldset legend {
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    padding: 0;
+    width: 100%;
+}
+
 /* ===== Theme Toggle ===== */
 .theme-toggle {
     position: fixed;

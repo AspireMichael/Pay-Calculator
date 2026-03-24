@@ -495,6 +495,125 @@ function calculateTeacher() {
 
     // Scroll
     $('#results-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // Generate comparison
+    generateComparison(salary, takeHome);
+}
+
+// ===== What If? Comparison =====
+function quickTakeHome(gross, slPlans, children) {
+    const pen = getPensionAmounts(gross);
+    const tax = calculateIncomeTax(gross, pen.employee);
+    const ni = calculateEmployeeNI(gross);
+    const sl = calculateStudentLoan(gross, slPlans);
+    const hicbc = calculateChildBenefitCharge(gross, children);
+    return gross - tax - ni - sl - pen.employee - hicbc;
+}
+
+function generateComparison(currentGross, currentTakeHome) {
+    const region = getSelectedRegion();
+    const payScales = TEACHER_PAY[region];
+    const scaleValue = $('#pay-scale').value;
+    const tlrValue = $('#tlr-payment').value;
+    const senValue = $('#sen-allowance').value;
+
+    // Get student loan plans
+    const slPlans = [];
+    if ($('#sl-plan1').checked) slPlans.push('plan1');
+    if ($('#sl-plan2').checked) slPlans.push('plan2');
+    if ($('#sl-plan4').checked) slPlans.push('plan4');
+    if ($('#sl-plan5').checked) slPlans.push('plan5');
+    if ($('#sl-postgrad').checked) slPlans.push('postgrad');
+    const children = parseInt($('#children').value) || 0;
+
+    const scenarios = [];
+    const currentMonthly = currentTakeHome / 12;
+
+    // Current row (highlighted)
+    scenarios.push({ label: `📍 Current (${scaleValue}${tlrValue !== 'none' ? ' + TLR' : ''}${senValue !== 'none' ? ' + SEN' : ''})`, gross: currentGross, isCurrent: true });
+
+    // Get base salary (without TLR/SEN)
+    let baseSalary = 0;
+    if (scaleValue && scaleValue !== 'custom') {
+        baseSalary = payScales[scaleValue] || 0;
+    } else if (scaleValue === 'custom') {
+        baseSalary = parseFloat($('#custom-salary').value) || 0;
+    }
+    const currentTlr = TLR_PAYMENTS[tlrValue] ? TLR_PAYMENTS[tlrValue].amount : 0;
+    const currentSen = SEN_ALLOWANCE[senValue] ? SEN_ALLOWANCE[senValue].amount : 0;
+
+    // Scale progression scenarios
+    const allScales = ['M1','M2','M3','M4','M5','M6','UPS1','UPS2','UPS3'];
+    const currentIdx = allScales.indexOf(scaleValue);
+
+    if (scaleValue !== 'custom') {
+        // Next scale point up
+        if (currentIdx >= 0 && currentIdx < allScales.length - 1) {
+            const nextScale = allScales[currentIdx + 1];
+            const nextBase = payScales[nextScale];
+            if (nextBase) {
+                scenarios.push({ label: `Move to ${nextScale}`, gross: nextBase + currentTlr + currentSen });
+            }
+        }
+
+        // If on M scale, show UPS1 jump
+        if (scaleValue.startsWith('M') && scaleValue !== 'M6') {
+            scenarios.push({ label: 'Jump to UPS1', gross: payScales.UPS1 + currentTlr + currentSen });
+        }
+        // If on M6, the next is UPS1 — already covered above
+        // If on UPS scale, show L1
+        if (scaleValue.startsWith('UPS')) {
+            scenarios.push({ label: 'Move to Leadership L1', gross: payScales.L1 + currentTlr + currentSen });
+        }
+    }
+
+    // TLR scenarios (if not already on a TLR)
+    if (tlrValue === 'none') {
+        scenarios.push({ label: 'Add TLR 2 (Min £3,527)', gross: currentGross + 3527 });
+        scenarios.push({ label: 'Add TLR 2 (Max £8,611)', gross: currentGross + 8611 });
+        scenarios.push({ label: 'Add TLR 1 (Min £10,174)', gross: currentGross + 10174 });
+    } else {
+        // Show what it looks like without the TLR
+        scenarios.push({ label: 'Without TLR', gross: currentGross - currentTlr });
+    }
+
+    // SEN scenarios (if not already on SEN)
+    if (senValue === 'none') {
+        scenarios.push({ label: 'Add SEN (Min £2,787)', gross: currentGross + 2787 });
+        scenarios.push({ label: 'Add SEN (Max £5,497)', gross: currentGross + 5497 });
+    } else {
+        scenarios.push({ label: 'Without SEN', gross: currentGross - currentSen });
+    }
+
+    // Build table rows
+    const tbody = $('#comparison-tbody');
+    tbody.innerHTML = '';
+
+    for (const s of scenarios) {
+        const takeHome = quickTakeHome(s.gross, slPlans, children);
+        const monthly = takeHome / 12;
+        const diff = monthly - currentMonthly;
+        const tr = document.createElement('tr');
+
+        if (s.isCurrent) {
+            tr.style.background = 'rgba(99, 102, 241, 0.08)';
+            tr.style.fontWeight = '600';
+        }
+
+        const diffText = s.isCurrent ? '—' :
+            (diff >= 0 ? `+${formatCurrency(diff)}` : `-${formatCurrency(Math.abs(diff))}`);
+        const diffColor = s.isCurrent ? 'inherit' : (diff >= 0 ? 'var(--accent-green)' : 'var(--accent-red)');
+
+        tr.innerHTML = `
+            <td style="padding:0.5rem;text-align:left;">${s.label}</td>
+            <td style="padding:0.5rem;text-align:right;">${formatCurrency(s.gross)}</td>
+            <td style="padding:0.5rem;text-align:right;">${formatCurrency(monthly)}</td>
+            <td style="padding:0.5rem;text-align:right;color:${diffColor};font-weight:600;">${diffText}</td>
+        `;
+        tbody.appendChild(tr);
+    }
+
+    $('#comparison-section').style.display = 'block';
 }
 
 // ===== Share =====
