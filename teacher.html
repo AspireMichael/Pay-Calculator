@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Take-Home Pay Calculator | UK 2025/26</title>
+    <meta name="description" content="Calculate your teacher take-home pay with TPS pension, pay scales M1-M6, UPS, Leadership, TLR and SEN allowances. 2025/26 England pay scales.">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Override layout for teacher page — no tabs, simpler layout */
+        .teacher-layout {
+            display: flex;
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            align-items: flex-start;
+        }
+        .teacher-main {
+            flex: 1;
+            min-width: 0;
+        }
+        .teacher-sidebar {
+            width: 280px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 1rem;
+        }
+        .teacher-sidebar .ref-section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+        }
+        .teacher-sidebar .ref-section h3 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        .teacher-sidebar .ref-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.25rem 0;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .teacher-sidebar .ref-row:last-child { border-bottom: none; }
+        .teacher-sidebar .ref-row span:last-child { font-weight: 600; color: var(--text-primary); }
+        .teacher-sidebar .ref-note {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: var(--ref-bg);
+            border-radius: 8px;
+        }
+
+        @media (max-width: 900px) {
+            .teacher-layout { flex-direction: column; }
+            .teacher-sidebar { width: 100%; position: static; }
+        }
+    </style>
+</head>
+<body>
+    <header class="app-header" style="max-width:1200px;margin:0 auto;padding:1rem;">
+        <div class="header-content">
+            <div class="logo-title">
+                <div class="logo">🎓</div>
+                <div>
+                    <h1>Teacher Pay Calculator</h1>
+                    <p class="subtitle">UK PAY SCALES 2025/26 · ENGLAND (EXCL. LONDON)</p>
+                </div>
+            </div>
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">🌙</button>
+        </div>
+        <div style="text-align:center;margin-top:0.5rem;">
+            <a href="index.html" style="color:var(--text-muted);font-size:0.85rem;text-decoration:underline;">← Back to General Calculator</a>
+        </div>
+    </header>
+
+    <div class="teacher-layout">
+        <div class="teacher-main">
+            <div class="panel-grid" style="display:block;">
+                <!-- Input Card -->
+                <div class="card input-card">
+                    <div class="card-header">
+                        <h2>Your Teaching Role</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="pay-scale">Pay Scale Point</label>
+                            <select id="pay-scale" class="input-standard">
+                                <optgroup label="Main Pay Range">
+                                    <option value="M1">M1 – £32,916</option>
+                                    <option value="M2">M2 – £34,823</option>
+                                    <option value="M3">M3 – £37,101</option>
+                                    <option value="M4">M4 – £39,556</option>
+                                    <option value="M5">M5 – £42,057</option>
+                                    <option value="M6">M6 – £45,352</option>
+                                </optgroup>
+                                <optgroup label="Upper Pay Scale">
+                                    <option value="UPS1">UPS1 – £47,472</option>
+                                    <option value="UPS2">UPS2 – £49,232</option>
+                                    <option value="UPS3">UPS3 – £51,048</option>
+                                </optgroup>
+                                <optgroup label="Leadership">
+                                    <option value="L1">L1 – £51,834</option>
+                                    <option value="L2">L2 – £53,104</option>
+                                    <option value="L3">L3 – £54,403</option>
+                                    <option value="L4">L4 – £55,728</option>
+                                    <option value="L5">L5 – £57,089</option>
+                                    <option value="L6">L6 – £58,491</option>
+                                    <option value="L7">L7 – £60,038</option>
+                                    <option value="L8">L8 – £61,398</option>
+                                    <option value="L9">L9 – £62,903</option>
+                                    <option value="L10">L10 – £64,490</option>
+                                    <option value="L11">L11 – £66,135</option>
+                                    <option value="L12">L12 – £67,635</option>
+                                    <option value="L13">L13 – £69,300</option>
+                                    <option value="L14">L14 – £70,998</option>
+                                    <option value="L15">L15 – £72,738</option>
+                                    <option value="L16">L16 – £74,642</option>
+                                    <option value="L17">L17 – £76,331</option>
+                                    <option value="L18">L18 – £78,223</option>
+                                </optgroup>
+                                <optgroup label="Other">
+                                    <option value="custom">Custom Salary…</option>
+                                </optgroup>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="custom-salary-group" style="display:none;">
+                            <label for="custom-salary">Custom Annual Salary</label>
+                            <div class="input-wrapper currency">
+                                <span class="input-prefix">£</span>
+                                <input type="number" id="custom-salary" placeholder="e.g. 42000" min="0" step="100">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tlr-payment">TLR Payment</label>
+                            <select id="tlr-payment" class="input-standard">
+                                <option value="none">None</option>
+                                <optgroup label="TLR 2">
+                                    <option value="tlr2_min">TLR 2 (Min) – £3,527</option>
+                                    <option value="tlr2_mid">TLR 2 (Mid) – £6,069</option>
+                                    <option value="tlr2_max">TLR 2 (Max) – £8,611</option>
+                                </optgroup>
+                                <optgroup label="TLR 1">
+                                    <option value="tlr1_min">TLR 1 (Min) – £10,174</option>
+                                    <option value="tlr1_mid">TLR 1 (Mid) – £13,695</option>
+                                    <option value="tlr1_max">TLR 1 (Max) – £17,216</option>
+                                </optgroup>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sen-allowance">SEN Allowance</label>
+                            <select id="sen-allowance" class="input-standard">
+                                <option value="none">None</option>
+                                <option value="min">SEN (Min) – £2,787</option>
+                                <option value="max">SEN (Max) – £5,497</option>
+                            </select>
+                        </div>
+
+                        <!-- Salary Summary -->
+                        <div class="salary-summary-box">
+                            <h3>📊 Salary Summary</h3>
+                            <div class="breakdown-list">
+                                <div class="breakdown-row">
+                                    <span class="breakdown-label">Base Pay Scale</span>
+                                    <span class="breakdown-value" id="salary-base-display">£32,916.00</span>
+                                </div>
+                                <div class="breakdown-row">
+                                    <span class="breakdown-label">TLR Payment</span>
+                                    <span class="breakdown-value" id="salary-tlr-display">–</span>
+                                </div>
+                                <div class="breakdown-row">
+                                    <span class="breakdown-label">SEN Allowance</span>
+                                    <span class="breakdown-value" id="salary-sen-display">–</span>
+                                </div>
+                                <div class="breakdown-divider"></div>
+                                <div class="breakdown-row total">
+                                    <span class="breakdown-label">Total Gross Salary</span>
+                                    <span class="breakdown-value" id="salary-total-display">£32,916.00</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pension Toggle -->
+                        <div class="form-group">
+                            <label>Pension</label>
+                            <div class="toggle-switch-group">
+                                <button class="toggle-btn active" id="pension-tps" type="button">Teachers' Pension (TPS)</button>
+                                <button class="toggle-btn" id="pension-custom" type="button">Custom</button>
+                            </div>
+                            <div id="custom-pension-inputs" style="display:none;margin-top:0.75rem;">
+                                <div class="form-row" style="display:flex;gap:0.75rem;">
+                                    <div style="flex:1;">
+                                        <label for="custom-pension-employee" style="font-size:0.8rem;color:var(--text-secondary);">Employee %</label>
+                                        <input type="number" id="custom-pension-employee" value="5" min="0" max="50" step="0.1" class="input-standard" style="margin-top:0.25rem;">
+                                    </div>
+                                    <div style="flex:1;">
+                                        <label for="custom-pension-employer" style="font-size:0.8rem;color:var(--text-secondary);">Employer %</label>
+                                        <input type="number" id="custom-pension-employer" value="3" min="0" max="50" step="0.1" class="input-standard" style="margin-top:0.25rem;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Student Loan</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-label"><input type="checkbox" id="sl-plan1"> Plan 1</label>
+                                <label class="checkbox-label"><input type="checkbox" id="sl-plan2"> Plan 2</label>
+                                <label class="checkbox-label"><input type="checkbox" id="sl-plan4"> Plan 4</label>
+                                <label class="checkbox-label"><input type="checkbox" id="sl-plan5"> Plan 5</label>
+                                <label class="checkbox-label"><input type="checkbox" id="sl-postgrad"> Postgraduate</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="children">Number of Children (for Child Benefit)</label>
+                            <input type="number" id="children" value="0" min="0" max="10" class="input-standard">
+                        </div>
+
+                        <button class="btn-calculate" id="btn-calculate" type="button">
+                            <span>Calculate Take-Home Pay</span>
+                            <span class="btn-icon">→</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Results Card -->
+                <div class="card results-card" id="results-section" style="display:none;">
+                    <div class="card-header">
+                        <h2>Your Take-Home Pay</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="hero-result">
+                            <div class="hero-amount">
+                                <div class="hero-label">Monthly Take-Home</div>
+                                <div class="hero-value" id="res-monthly">£0.00</div>
+                            </div>
+                            <div class="hero-amount secondary">
+                                <div class="hero-label">Annual Take-Home</div>
+                                <div class="hero-value" id="res-annual">£0.00</div>
+                            </div>
+                        </div>
+
+                        <div class="deductions-breakdown">
+                            <h3>Monthly Deductions</h3>
+                            <div class="breakdown-list">
+                                <div class="breakdown-row">
+                                    <span class="breakdown-label">Gross Salary</span>
+                                    <span class="breakdown-value positive" id="res-gross-m">£0.00</span>
+                                </div>
+                                <div class="breakdown-divider"></div>
+                                <div class="breakdown-row deduction">
+                                    <span class="breakdown-label">Income Tax</span>
+                                    <span class="breakdown-value negative" id="res-tax-m">-£0.00</span>
+                                </div>
+                                <div class="breakdown-row deduction">
+                                    <span class="breakdown-label">Employee NI</span>
+                                    <span class="breakdown-value negative" id="res-ni-m">-£0.00</span>
+                                </div>
+                                <div class="breakdown-row deduction" id="row-sl" style="display:none;">
+                                    <span class="breakdown-label">Student Loan</span>
+                                    <span class="breakdown-value negative" id="res-sl-m">-£0.00</span>
+                                </div>
+                                <div class="breakdown-row deduction">
+                                    <span class="breakdown-label pension-label-dynamic">Teachers' Pension (TPS)</span>
+                                    <span class="breakdown-value negative" id="res-pension-m">-£0.00</span>
+                                </div>
+                                <div class="breakdown-row deduction" id="row-hicbc" style="display:none;">
+                                    <span class="breakdown-label">Child Benefit Tax Charge</span>
+                                    <span class="breakdown-value negative" id="res-hicbc-m">-£0.00</span>
+                                </div>
+                                <div class="breakdown-divider"></div>
+                                <div class="breakdown-row total">
+                                    <span class="breakdown-label">Net Take-Home</span>
+                                    <span class="breakdown-value" id="res-net-m">£0.00</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="deductions-breakdown annual-section">
+                            <h3>Annual Summary</h3>
+                            <div class="breakdown-list">
+                                <div class="breakdown-row">
+                                    <span class="breakdown-label">Gross Salary</span>
+                                    <span class="breakdown-value positive" id="res-gross-a">£0.00</span>
+                                </div>
+                                <div class="breakdown-row deduction">
+                                    <span class="breakdown-label">Income Tax</span>
+                                    <span class="breakdown-value negative" id="res-tax-a">-£0.00</span>
+                                </div>
+                                <div class="breakdown-row deduction">
+                                    <span class="breakdown-label">Employee NI</span>
+                                    <span class="breakdown-value negative" id="res-ni-a">-£0.00</span>
+                                </div>
+                                <div class="breakdown-row deduction" id="row-sl-a" style="display:none;">
+                                    <span class="breakdown-label">Student Loan</span>
+                                    <span class="breakdown-value negative" id="res-sl-a">-£0.00</span>
+                                </div>
+                                <div class="breakdown-row deduction">
+                                    <span class="breakdown-label pension-label-dynamic">Teachers' Pension (TPS)</span>
+                                    <span class="breakdown-value negative" id="res-pension-a">-£0.00</span>
+                                </div>
+                                <div class="breakdown-row deduction" id="row-hicbc-a" style="display:none;">
+                                    <span class="breakdown-label">Child Benefit Tax Charge</span>
+                                    <span class="breakdown-value negative" id="res-hicbc-a">-£0.00</span>
+                                </div>
+                                <div class="breakdown-divider"></div>
+                                <div class="breakdown-row total">
+                                    <span class="breakdown-label">Net Take-Home</span>
+                                    <span class="breakdown-value" id="res-net-a">£0.00</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pension-summary" id="tps-summary">
+                            <h3>🏫 Teachers' Pension (TPS)</h3>
+                            <div class="info-badge" style="margin-bottom:0.75rem;">
+                                Your employee contribution rate: <strong id="res-tps-rate">7.4%</strong> (tiered based on salary)
+                            </div>
+                            <div class="pension-grid">
+                                <div class="pension-item">
+                                    <span class="pension-label">Your Contribution</span>
+                                    <span class="pension-value" id="res-tps-employee">£0.00</span>
+                                </div>
+                                <div class="pension-item">
+                                    <span class="pension-label">School Contribution (28.68%)</span>
+                                    <span class="pension-value" id="res-tps-employer">£0.00</span>
+                                </div>
+                                <div class="pension-item highlight">
+                                    <span class="pension-label">Total Added to Pension</span>
+                                    <span class="pension-value" id="res-tps-total">£0.00</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="rate-breakdown">
+                            <h3>⏰ Rate Breakdown</h3>
+                            <div class="pension-grid">
+                                <div class="pension-item">
+                                    <span class="pension-label">Hourly Rate (take-home)</span>
+                                    <span class="pension-value" id="res-hourly">£0.00</span>
+                                </div>
+                                <div class="pension-item">
+                                    <span class="pension-label">Daily Rate (take-home)</span>
+                                    <span class="pension-value" id="res-daily">£0.00</span>
+                                </div>
+                                <div class="pension-item">
+                                    <span class="pension-label">Weekly Rate (take-home)</span>
+                                    <span class="pension-value" id="res-weekly">£0.00</span>
+                                </div>
+                            </div>
+                            <div class="info-badge" style="margin-top: 0.5rem;">Based on 37.5 hours/week, 195 teaching days/year</div>
+                        </div>
+
+                        <div class="marginal-rate-section">
+                            <h3>⚠️ Your Marginal Tax Rate</h3>
+                            <p style="font-size:0.82rem;color:var(--text-secondary);margin-bottom:0.75rem;line-height:1.5;">This is <strong>not</strong> the tax rate on your current earnings — it's the rate that would apply to the <strong>next £1</strong> you earn. For example, if you got a pay rise or took on a TLR, this is how much of each extra pound would go to tax, NI and/or student loan repayments.</p>
+                            <div class="marginal-rate-grid">
+                                <div class="marginal-rate-box">
+                                    <div class="marginal-rate-box-label">Tax + NI Only</div>
+                                    <div class="marginal-rate-bar">
+                                        <div class="marginal-rate-fill" id="res-marginal-bar-tax" style="width: 0%;"></div>
+                                        <span class="marginal-rate-pct" id="res-marginal-pct-tax">0%</span>
+                                    </div>
+                                    <p class="marginal-rate-label" id="res-marginal-desc-tax">You keep £1.00 per extra £1</p>
+                                </div>
+                                <div class="marginal-rate-box">
+                                    <div class="marginal-rate-box-label">Incl. Student Loan</div>
+                                    <div class="marginal-rate-bar">
+                                        <div class="marginal-rate-fill" id="res-marginal-bar-sl" style="width: 0%;"></div>
+                                        <span class="marginal-rate-pct" id="res-marginal-pct-sl">0%</span>
+                                    </div>
+                                    <p class="marginal-rate-label" id="res-marginal-desc-sl">You keep £1.00 per extra £1</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons" style="display:flex;gap:0.75rem;margin-top:1rem;">
+                            <button class="btn-print" id="btn-share" type="button" style="flex:1;">
+                                🔗 Share Calculation
+                            </button>
+                            <button class="btn-print" id="btn-print" type="button" style="flex:1;">
+                                🖨️ Print / Save as PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reference Sidebar – sits to the right -->
+        <div class="teacher-sidebar">
+            <div class="ref-section">
+                <h3>📊 Pay Scales 2025/26</h3>
+                <div class="ref-row"><span>M1</span><span>£32,916</span></div>
+                <div class="ref-row"><span>M6</span><span>£45,352</span></div>
+                <div class="ref-row"><span>UPS1</span><span>£47,472</span></div>
+                <div class="ref-row"><span>UPS3</span><span>£51,048</span></div>
+                <div class="ref-row"><span>L1</span><span>£51,834</span></div>
+                <div class="ref-row"><span>L6</span><span>£58,491</span></div>
+                <div class="ref-row"><span>L18</span><span>£78,223</span></div>
+            </div>
+
+            <div class="ref-section">
+                <h3>🏫 TPS Employee Rates</h3>
+                <div class="ref-row"><span>Up to £34,290</span><span>7.4%</span></div>
+                <div class="ref-row"><span>to £46,159</span><span>8.6%</span></div>
+                <div class="ref-row"><span>to £54,730</span><span>9.6%</span></div>
+                <div class="ref-row"><span>to £72,535</span><span>10.2%</span></div>
+                <div class="ref-row"><span>to £98,909</span><span>11.3%</span></div>
+                <div class="ref-row"><span>£98,909+</span><span>11.7%</span></div>
+                <div class="ref-note">
+                    <span>ℹ️</span> Employer rate: <strong>28.68%</strong>
+                </div>
+            </div>
+
+            <div class="ref-section">
+                <h3>📈 Income Tax Bands</h3>
+                <div class="ref-row"><span>Personal Allowance</span><span>£12,570</span></div>
+                <div class="ref-row"><span>Basic (20%)</span><span>to £50,270</span></div>
+                <div class="ref-row"><span>Higher (40%)</span><span>to £125,140</span></div>
+                <div class="ref-row"><span>Additional (45%)</span><span>£125,140+</span></div>
+            </div>
+
+            <div class="ref-section">
+                <h3>🎓 Student Loan Thresholds</h3>
+                <div class="ref-row"><span>Plan 1 (9%)</span><span>£24,990</span></div>
+                <div class="ref-row"><span>Plan 2 (9%)</span><span>£27,295</span></div>
+                <div class="ref-row"><span>Plan 4 (9%)</span><span>£31,395</span></div>
+                <div class="ref-row"><span>Postgrad (6%)</span><span>£21,000</span></div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="app-footer" style="max-width:1200px;margin:1rem auto;">
+        <p>Calculations are estimates based on 2025/26 pay scales and 2025/26 UK tax year rates. Always consult a qualified accountant for financial decisions.</p>
+    </footer>
+
+    <script src="teacher.js"></script>
+</body>
+</html>
