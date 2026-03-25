@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://aspiremichael.github.io/Pay-Calculator/sitemap.xml
