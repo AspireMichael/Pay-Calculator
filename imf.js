@@ -368,4 +368,35 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-print').addEventListener('click', () => {
         window.print();
     });
+    
+    // Share
+    const btnShare = document.getElementById('btn-share');
+    if (btnShare) {
+        btnShare.addEventListener('click', async () => {
+            const shareData = {
+                title: 'IMF Funding Calculator 2026/27',
+                text: 'Estimate your school\'s Inclusive Mainstream Fund allocation for 2026/27.',
+                url: 'https://aspiremichael.github.io/Pay-Calculator/imf.html'
+            };
+            
+            if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+                try {
+                    await navigator.share(shareData);
+                } catch (err) {
+                    // User probably cancelled share, ignore.
+                }
+            } else {
+                try {
+                    await navigator.clipboard.writeText(shareData.url);
+                    const originalText = btnShare.innerHTML;
+                    btnShare.innerHTML = '✅ Link Copied!';
+                    setTimeout(() => {
+                        btnShare.innerHTML = originalText;
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy: ', err);
+                }
+            }
+        });
+    }
 });
