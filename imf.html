@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMF Funding Calculator 2026/27 | Aspire Inclusion</title>
+    <meta name="description" content="Free tool to estimate your school's Inclusive Mainstream Fund (IMF) allocation for 2026/27 based on DfE base funding rates and Area Cost Adjustments.">
+    <meta name="keywords" content="IMF calculator, inclusive mainstream fund, school funding calculator, DfE funding 2026/27, ACA, local authority funding, SEND funding">
+    <meta name="author" content="Aspire Inclusion Technologies">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://aspiremichael.github.io/Pay-Calculator/imf.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="IMF Funding Calculator 2026/27 | Aspire Inclusion">
+    <meta property="og:description" content="Estimate your school's Inclusive Mainstream Fund (IMF) allocation. Free tool updated for the 2026/27 financial year.">
+    <meta property="og:url" content="https://aspiremichael.github.io/Pay-Calculator/imf.html">
+    <meta property="og:site_name" content="Aspire Inclusion Technologies">
+    <meta property="og:locale" content="en_GB">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .teacher-layout {
+            display: flex;
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            align-items: flex-start;
+        }
+        .reference-sidebar .ref-section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+        }
+        .reference-sidebar .ref-section h3 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        .reference-sidebar .ref-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.25rem 0;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .reference-sidebar .ref-row:last-child { border-bottom: none; }
+        .reference-sidebar .ref-row span:last-child { font-weight: 600; color: var(--text-primary); }
+        .reference-sidebar .ref-note {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: var(--ref-bg);
+            border-radius: 8px;
+        }
+        /* Custom dropdown for LA search */
+        .la-dropdown-container {
+            position: relative;
+        }
+        .la-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0 0 12px 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            display: none;
+            backdrop-filter: blur(var(--glass-blur));
+        }
+        .la-dropdown.active {
+            display: block;
+        }
+        .la-dropdown-item {
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+        .la-dropdown-item:last-child {
+            border-bottom: none;
+        }
+        .la-dropdown-item:hover {
+            background: var(--ref-bg);
+            color: var(--accent-primary);
+        }
+        .la-dropdown-item-aca {
+            font-family: monospace;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+        .error-text {
+            color: var(--accent-red);
+            font-size: 0.75rem;
+            margin-top: 0.4rem;
+            display: none;
+        }
+        .input-error {
+            border-color: var(--accent-red) !important;
+        }
+    </style>
+</head>
+<body>
+    <header class="app-header" style="max-width:1200px;margin:0 auto;padding:1.5rem 1rem 1rem;">
+        <div class="header-content">
+            <div class="logo-area" style="flex-direction: column; gap: 0.5rem;">
+                <img src="aspire-inclusion-logo.png" alt="Aspire Inclusion Logo" style="height: 60px; object-fit: contain;">
+                <div>
+                    <div style="font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-primary); margin-bottom: 4px; font-weight: 600;">
+                        DfE Inclusive Mainstream Fund 2026–2027
+                    </div>
+                    <h1>School Funding Calculator</h1>
+                </div>
+            </div>
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                <span class="theme-icon sun">☀️</span>
+                <span class="theme-icon moon">🌙</span>
+            </button>
+        </div>
+        <div style="text-align:center;margin-top:1rem;">
+            <a href="index.html" style="color:var(--text-muted);font-size:0.85rem;text-decoration:underline;">← Back to General Calculators</a>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <div class="main-layout">
+            <main class="main-content">
+                <div class="panel-grid">
+                    <!-- Input Card -->
+                    <div class="card input-card">
+                        <div class="card-header">
+                            <h2>Your School Details</h2>
+                        </div>
+                        <div class="card-body">
+                            <fieldset class="form-group" style="border:none;padding:0;margin:0;">
+                                <legend style="font-weight:600;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-secondary);margin-bottom:0.5rem;">School Phase</legend>
+                                <div class="toggle-switch-group" role="group" aria-label="School Phase">
+                                    <button class="toggle-btn active" id="phase-primary" type="button" aria-pressed="true">
+                                        <div style="font-weight: 700;">Primary</div>
+                                        <div style="font-size: 0.7rem; opacity: 0.8; font-weight: 400;">£16/pupil · £79/LPA</div>
+                                    </button>
+                                    <button class="toggle-btn" id="phase-secondary" type="button" aria-pressed="false">
+                                        <div style="font-weight: 700;">Secondary</div>
+                                        <div style="font-size: 0.7rem; opacity: 0.8; font-weight: 400;">£14/pupil · £88/LPA</div>
+                                    </button>
+                                </div>
+                            </fieldset>
+
+                            <div class="form-group la-dropdown-container">
+                                <label for="la-input">Local Authority</label>
+                                <div class="input-wrapper">
+                                    <input type="text" id="la-input" class="input-standard" placeholder="Start typing your local authority..." autocomplete="off">
+                                    <div id="aca-badge" class="info-badge" style="position: absolute; right: 0.75rem; display: none; padding: 0.2rem 0.5rem; font-size: 0.75rem;"></div>
+                                </div>
+                                <div class="la-dropdown" id="la-dropdown"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="total-pupils">Total Pupils (NOR) <span class="label-hint">October 2025 school census</span></label>
+                                <input type="number" id="total-pupils" min="0" class="input-standard" placeholder="e.g. 420">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="lpa-pupils">Low Prior Attainment (LPA) Pupils <span class="label-hint">From the 2025-26 APT</span></label>
+                                <input type="number" id="lpa-pupils" min="0" class="input-standard" placeholder="e.g. 46">
+                                <div id="lpa-error" class="error-text">LPA pupils cannot exceed total pupils.</div>
+                            </div>
+
+                            <button class="btn-calculate" id="btn-calculate" type="button" aria-label="Calculate Estimate">
+                                <span>Calculate Estimate</span>
+                                <span class="btn-icon" aria-hidden="true">→</span>
+                            </button>
+                            <button class="btn-small" id="btn-reset" type="button" style="width: 100%; margin-top: 0.75rem; display: none;">
+                                Reset Form
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Results Card -->
+                    <div class="card results-card" id="results-section" style="display:none;" aria-live="polite" aria-atomic="true">
+                        <div class="card-header">
+                            <h2>Estimated IMF Allocation</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="hero-result" style="grid-template-columns: 1fr;">
+                                <div class="hero-amount" style="background: var(--gradient-btn);">
+                                    <div class="hero-label">Total Allocation For 2026–27</div>
+                                    <div class="hero-value" id="res-total">£0.00</div>
+                                    <div style="font-size: 0.8rem; opacity: 0.9; margin-top: 0.5rem;" id="res-subtitle">
+                                        Local Authority · Phase
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="deductions-breakdown">
+                                <h3>Calculation Breakdown</h3>
+                                <div class="breakdown-list">
+                                    <div class="breakdown-row">
+                                        <span class="breakdown-label">Lump sum (all schools)</span>
+                                        <span class="breakdown-value positive" id="res-lumpsum">£0.00</span>
+                                    </div>
+                                    <div class="breakdown-divider"></div>
+                                    <div class="breakdown-row">
+                                        <span class="breakdown-label" id="res-basic-label">Basic per-pupil</span>
+                                        <span class="breakdown-value positive" id="res-basic-total">£0.00</span>
+                                    </div>
+                                    <div class="breakdown-row">
+                                        <span class="breakdown-label" id="res-lpa-label">LPA per-pupil</span>
+                                        <span class="breakdown-value positive" id="res-lpa-total">£0.00</span>
+                                    </div>
+                                    <div class="breakdown-divider"></div>
+                                    <div class="breakdown-row total">
+                                        <span class="breakdown-label" style="font-weight: 500;">Sub-total (before ACA)</span>
+                                        <span class="breakdown-value" id="res-pre-aca">£0.00</span>
+                                    </div>
+                                    <div class="breakdown-row">
+                                        <span class="breakdown-label">Area Cost Adjustment (ACA) multiplier</span>
+                                        <span class="breakdown-value" style="color: var(--accent-primary);" id="res-aca-val">× 1.00000</span>
+                                    </div>
+                                    <div class="breakdown-divider" style="height: 2px; background: var(--accent-primary);"></div>
+                                    <div class="breakdown-row total grand-total">
+                                        <span class="breakdown-label">Total Estimate</span>
+                                        <span class="breakdown-value" id="res-grand-total">£0.00</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="pension-summary" style="margin-top: 1.5rem;">
+                                <h3>Key Statistics</h3>
+                                <div class="pension-grid">
+                                    <div class="pension-item">
+                                        <span class="pension-label">Per Pupil</span>
+                                        <span class="pension-value" style="color: var(--accent-primary);" id="stat-per-pupil">£0.00</span>
+                                    </div>
+                                    <div class="pension-item">
+                                        <span class="pension-label">Per Month</span>
+                                        <span class="pension-value" style="color: var(--accent-primary);" id="stat-per-month">£0.00</span>
+                                    </div>
+                                    <div class="pension-item">
+                                        <span class="pension-label">LPA Rate</span>
+                                        <span class="pension-value" style="color: var(--accent-primary);" id="stat-lpa-rate">0.0%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="action-buttons" style="display:flex;gap:0.75rem;margin-top:1.5rem;">
+                                <button class="btn-print" id="btn-print" type="button" style="flex:1;">
+                                    🖨️ Print / Save as PDF
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <aside class="reference-sidebar" id="reference-sidebar">
+                <div class="sidebar-content">
+                    <div class="ref-section">
+                        <h3>ℹ️ Important Notice</h3>
+                        <p style="font-size:0.8rem;color:var(--text-secondary);line-height:1.5;margin-bottom:0;">
+                            Estimates are based on DfE base funding rates (25 March 2026) and ACA values from the NFF 2026-27 technical note (November 2025). Final allocations will be confirmed in May 2026. Pupil data utilizes the October 2025 census and 2025-26 APT. <strong>Not an official DfE tool.</strong>
+                        </p>
+                    </div>
+
+                    <div class="ref-section">
+                        <h3>💷 Base Funding Rates</h3>
+                        <div class="ref-row"><span>Lump Sum</span><span>£3,000</span></div>
+                        <div class="ref-note" style="margin-top:0.25rem;margin-bottom:0.75rem;">Paid to all schools regardless of size</div>
+                        
+                        <div style="font-size:0.75rem;font-weight:700;color:var(--text-primary);margin-top:0.5rem;text-transform:uppercase;">Primary Schools</div>
+                        <div class="ref-row"><span>Basic Per-Pupil</span><span>£16</span></div>
+                        <div class="ref-row"><span>LPA Per-Pupil</span><span>£79</span></div>
+                        
+                        <div style="font-size:0.75rem;font-weight:700;color:var(--text-primary);margin-top:0.75rem;text-transform:uppercase;">Secondary Schools</div>
+                        <div class="ref-row"><span>Basic Per-Pupil</span><span>£14</span></div>
+                        <div class="ref-row"><span>LPA Per-Pupil</span><span>£88</span></div>
+                    </div>
+
+                    <div class="ref-section">
+                        <h3>🌍 Area Cost Adjustment</h3>
+                        <p style="font-size:0.8rem;color:var(--text-secondary);line-height:1.5;margin:0;">
+                            The total calculation (Lump Sum + Basic Funding + LPA Funding) is multiplied by your Local Authority's <strong>Area Cost Adjustment (ACA)</strong> to reflect geographical variation in labour costs.
+                        </p>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- About This Tool -->
+        <div style="max-width:1200px;margin:1.5rem auto 0.75rem;">
+            <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:1rem 1.25rem;">
+                <h3 style="font-size:0.85rem;font-weight:700;color:var(--text-primary);margin-bottom:0.4rem;">About this tool</h3>
+                <p style="font-size:0.82rem;color:var(--text-secondary);line-height:1.6;margin:0;">This free calculator is provided by <strong>Aspire Inclusion Technologies</strong>. We also offer inclusion apps and behaviour training services for schools. Links below are promotional.</p>
+            </div>
+        </div>
+
+        <!-- Sponsored Resources -->
+        <div style="max-width:1200px;margin:0 auto 1.5rem;">
+            <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;">
+                <div style="flex:1;min-width:280px;max-width:550px;">
+                    <p style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:0.4rem;text-align:center;">Sponsored Resource</p>
+                    <a href="https://aspireinclusion.app/" target="_blank" rel="noopener sponsored" style="background:var(--bg-card);border:2px solid var(--border-color);border-radius:16px;padding:1.5rem;text-align:center;text-decoration:none;transition:border-color 0.3s,transform 0.2s,box-shadow 0.3s;display:block;" onmouseover="this.style.borderColor='#1a5276';this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.15)'" onmouseout="this.style.borderColor='var(--border-color)';this.style.transform='';this.style.boxShadow=''">
+                        <img src="aspire-inclusion-logo.png" alt="Aspire Inclusion Technologies" style="max-width:240px;height:auto;margin:0 auto 0.75rem;display:block;">
+                        <p style="color:var(--text-secondary);font-size:0.9rem;">SEND Support Apps including Sensory Circuit Builder →</p>
+                    </a>
+                </div>
+                <div style="flex:1;min-width:280px;max-width:550px;">
+                    <p style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:0.4rem;text-align:center;">Sponsored Resource</p>
+                    <a href="https://aspirebm.thinkific.com/" target="_blank" rel="noopener sponsored" style="background:var(--bg-card);border:2px solid var(--border-color);border-radius:16px;padding:1.5rem;text-align:center;text-decoration:none;transition:border-color 0.3s,transform 0.2s,box-shadow 0.3s;display:block;" onmouseover="this.style.borderColor='#e91e96';this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(0,0,0,0.15)'" onmouseout="this.style.borderColor='var(--border-color)';this.style.transform='';this.style.boxShadow=''">
+                        <img src="aspire-bm-logo.png" alt="Aspire Behaviour Management - Creating Inclusive Education" style="max-width:240px;height:auto;margin:0 auto 0.75rem;display:block;">
+                        <p style="color:var(--text-secondary);font-size:0.9rem;">Training to Support SEMH &amp; SEND Children →</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <footer style="max-width:1200px;margin:0 auto;padding:1.5rem 0;border-top:1px solid var(--border-color);">
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1rem;">
+                <div>
+                    <p style="font-size:0.85rem;font-weight:600;color:var(--text-primary);margin:0 0 0.25rem;">© 2026 Aspire Inclusion Technologies</p>
+                    <p style="font-size:0.78rem;color:var(--text-muted);margin:0;">Educational financial estimate tool – not financial advice</p>
+                </div>
+                <div style="display:flex;gap:1.5rem;">
+                    <a href="https://aspireinclusion.app/privacy.html" target="_blank" rel="noopener" style="font-size:0.8rem;color:var(--text-secondary);text-decoration:none;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">Privacy Policy</a>
+                    <a href="https://aspireinclusion.app/" target="_blank" rel="noopener" style="font-size:0.8rem;color:var(--text-secondary);text-decoration:none;" onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">Contact</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="imf.js"></script>
+</body>
+</html>
