@@ -183,7 +183,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const lpaError = document.getElementById('lpa-error');
     
     const btnCalculate = document.getElementById('btn-calculate');
-    const btnReset = document.getElementById('btn-reset');
     const resultsSection = document.getElementById('results-section');
     
     // Check saved theme
@@ -354,31 +353,15 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('stat-lpa-rate').textContent = tp > 0 ? ((lp / tp) * 100).toFixed(1) + '%' : '0.0%';
         
         resultsSection.style.display = 'block';
-        btnCalculate.style.display = 'none';
-        btnReset.style.display = 'block';
+        
+        // Change button to Recalculate
+        const spanText = btnCalculate.querySelector('span:first-child');
+        const spanIcon = btnCalculate.querySelector('.btn-icon');
+        if (spanText) spanText.textContent = 'Recalculate Estimate';
+        if (spanIcon) spanIcon.textContent = '↻';
         
         // Scroll to results
         resultsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    });
-    
-    // Reset
-    btnReset.addEventListener('click', () => {
-        laInput.value = '';
-        selectedLA = null;
-        selectedACA = null;
-        acaBadge.style.display = 'none';
-        laInput.style.paddingRight = '1rem';
-        
-        totalPupilsInput.value = '';
-        lpaPupilsInput.value = '';
-        lpaPupilsInput.classList.remove('input-error');
-        lpaError.style.display = 'none';
-        
-        resultsSection.style.display = 'none';
-        btnCalculate.style.display = 'flex';
-        btnReset.style.display = 'none';
-        
-        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
     
     // Print
